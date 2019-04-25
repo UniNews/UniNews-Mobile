@@ -34,7 +34,7 @@ const HomeStack = createStackNavigator({
                 fontWeight: 'bold',
             },
         },
-        // headerMode: 'none',
+        headerMode: 'none',
     }
 );
 

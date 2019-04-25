@@ -5,7 +5,7 @@ import { getCampus, selectCampus } from '../../../reducers/CampusReducer/actions
 const mapStateToProps = state => {
     const { selectedCampus, campus, completed, loading, error } = state.campusReducer;
     return {
-        selectedCampus: selectedCampus,
+        currentCampus: selectedCampus,
         campus: campus,
         completed: completed,
         loading: loading,
@@ -15,7 +15,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = {
     getCampus: getCampus,
-    selectCampus: selectCampus
+    changeCampus: selectCampus
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CampusView);
