@@ -1,8 +1,8 @@
-// import LoginScreen from '../screens/LoginScreen';
-// import RegisterScreen from '../screens/RegisterScreen'
+import LoginScreen from '../screens/LoginScreen';
+import RegisterScreen from '../screens/RegisterScreen'
 import CampusScreen from '../screens/HomeScreen/CampusScreen'
 import NewsScreen from '../screens/HomeScreen/NewsScreen'
-
+import LoadingScreen from '../screens/LoadingScreen'
 import PostScreen from '../screens/PostScreen'
 
 import ProfileScreen from '../screens/ProfileScreen'
@@ -11,7 +11,7 @@ import React from 'react';
 
 import { Icon } from 'react-native-elements';
 
-import { createStackNavigator, createBottomTabNavigator, createAppContainer } from 'react-navigation';
+import { createStackNavigator, createBottomTabNavigator, createSwitchNavigator, createAppContainer } from 'react-navigation';
 
 const HomeStack = createStackNavigator({
     Campus: {
@@ -22,34 +22,32 @@ const HomeStack = createStackNavigator({
     },
 }, {
         initialRouteName: 'Campus',
-        headerLayoutPreset: 'center',
-        defaultNavigationOptions: {
-            headerStyle: {
-                elevation: 0,
-                backgroundColor: '#fff',
-            },
-            headerTintColor: '#000',
-            headerTitleStyle: {
-                paddingTop: 30,
-                fontWeight: 'bold',
-            },
-        },
         headerMode: 'none',
     }
 );
 
-export default createAppContainer(createBottomTabNavigator(
-    {
-        Home:
-            HomeStack
-        ,
-        Post: {
-            screen: PostScreen
-        },
-        Profile: {
-            screen: ProfileScreen
-        },
+const AuthStack = createStackNavigator({
+    Login: {
+        screen: LoginScreen
     },
+    Register: {
+        screen: RegisterScreen
+    },
+}, {
+        initialRouteName: 'Login',
+        headerMode: 'none',
+    }
+);
+
+const MainTab = createBottomTabNavigator({
+    Home: HomeStack,
+    Post: {
+        screen: PostScreen
+    },
+    Profile: {
+        screen: ProfileScreen
+    },
+},
     {
         initialRouteName: 'Home',
         defaultNavigationOptions: ({ navigation }) => ({
@@ -74,6 +72,19 @@ export default createAppContainer(createBottomTabNavigator(
         tabBarOptions: {
             activeTintColor: 'tomato',
             inactiveTintColor: 'gray',
+        },
+    })
+
+export default createAppContainer(createSwitchNavigator(
+    {
+        Loading: {
+            screen: LoadingScreen
+        },
+        Auth: {
+            screen: AuthStack
+        },
+        Main: {
+            screen: MainTab
         },
     }
 ));

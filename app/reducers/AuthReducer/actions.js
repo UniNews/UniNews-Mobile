@@ -19,15 +19,7 @@ export const signupByEmail = (email, password, displayName) => dispatch => {
     firebaseService
         .auth()
         .createUserWithEmailAndPassword(email, password)
-        .then(user => {
-            console.debug(user.uid);
-            firebaseService.database().ref('users').child(user.uid)
-                .set({ displayName })
-                .then(() => {
-
-                    dispatch(signupSuccess(user));
-                });
-        })
+        .then(dispatch(signupSuccess(user)))
         .catch(error => {
             dispatch(sessionError(error.message));
         });

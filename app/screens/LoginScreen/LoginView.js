@@ -26,13 +26,13 @@ class LoginView extends React.Component {
   render() {
     return (
 
-      <ImageBackground source={require('../../assets/bg2.jpg')} style={{ width: '100%', height: '100%' }}>
+      <ImageBackground source={require('../../assets/imgs/bg.jpg')} style={{ width: '100%', height: '100%' }}>
         <KeyboardAvoidingView style={styles.container}>
           <Text>
             {this.props.error}
           </Text>
           <Image
-            source={require('../../assets/logo.png')}
+            source={require('../../assets/imgs/logo.png')}
             style={{
               width: 260, height: 220,
             }}
