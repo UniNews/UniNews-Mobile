@@ -37,6 +37,14 @@ const reducer = (state = initialState, action) => {
             };
         case types.SET_INITIAL_STATE:
             return initialState;
+        case types.GET_PROFILE:
+            return {
+                ...state,
+                isLoading: false,
+                user: null,
+                error: null,
+                isAuthenticated: false,
+            };
         default:
             return state;
     }

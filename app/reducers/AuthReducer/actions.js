@@ -1,5 +1,6 @@
 import firebaseService from '../../config/firebase';
 import * as types from './actionTypes';
+import service from '../../services/user';
 
 export const loginByEmail = (email, password) => dispatch => {
     dispatch(sessionLoading());
@@ -49,8 +50,15 @@ export const logoutUser = () => dispatch => {
 export const clearState = () => dispatch => {
     dispatch(sessionClear());
 };
-
-
+export const getProfile = (uid) => dispatch =>{
+    dispatch(sessionLoading());
+    return service.getProfile().then(response => response.json())
+        .then(response => dispatch(campusOk(response)))
+        .catch(err => dispatch(campusFail()));
+};
+const getProfile = () =>({
+    type: types.GET_PROFILE
+})
 const sessionLoading = () => ({
     type: types.SESSION_LOADING
 });
