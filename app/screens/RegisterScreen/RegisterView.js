@@ -26,7 +26,7 @@ class RegisterView extends React.Component {
 
     render() {
         return (
-            <ImageBackground source={require('../../assets/bg2.jpg')} style={{ width: '100%', height: '100%' }}>
+            <ImageBackground source={require('../../assets/imgs/bg.jpg')} style={{ width: '100%', height: '100%' }}>
 
                 <Text>
                     {this.props.error}
