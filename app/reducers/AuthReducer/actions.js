@@ -8,6 +8,7 @@ export const loginByEmail = (email, password) => dispatch => {
         .auth()
         .signInWithEmailAndPassword(email, password)
         .then(user => {
+            getProfile(user.uid)
             dispatch(sessionSuccess(user));
         })
         .catch(error => {
@@ -17,10 +18,11 @@ export const loginByEmail = (email, password) => dispatch => {
 
 export const signupByEmail = (email, password, displayName) => dispatch => {
     dispatch(sessionLoading());
+    // call UniNews-API from user service.
     firebaseService
         .auth()
         .createUserWithEmailAndPassword(email, password)
-        .then(dispatch(signupSuccess(user)))
+        .then(user => dispatch(signupSuccess(user)))
         .catch(error => {
             dispatch(sessionError(error.message));
         });
@@ -42,15 +44,17 @@ export const logoutUser = () => dispatch => {
 export const clearState = () => dispatch => {
     dispatch(sessionClear());
 };
-export const getProfile = (uid) => dispatch =>{
-    dispatch(sessionLoading());
+
+const getProfile = (uid) => {
     return service.getProfile(uid).then(response => response.json())
-        .then(response => dispatch(getProfileID(response)))
-        .catch(err => dispatch(sessionClear()));
+        .then(response => {
+            // map field to user object. Ex,
+            user.displayName = response.displayName
+            // etc.
+        })
+        .catch(err => dispatch(sessionError(err)));
 };
-const getProfileID = response =>({
-     type: types.GET_PROFILE, response
-})
+
 const sessionLoading = () => ({
     type: types.SESSION_LOADING
 });

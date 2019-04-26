@@ -5,7 +5,6 @@ const initialState = {
     error: null,
     isLoading: false,
     isAuthenticated: false,
-    getProfile:{}
 };
 
 const reducer = (state = initialState, action) => {
@@ -19,7 +18,6 @@ const reducer = (state = initialState, action) => {
                 user: action.user,
                 error: null,
                 isAuthenticated: true,
-                getProfile:{}
             };
         case types.SIGNUP_SUCCESS:
             return {
@@ -28,7 +26,6 @@ const reducer = (state = initialState, action) => {
                 user: action.user,
                 error: null,
                 isAuthenticated: false,
-                getProfile:{}
             };
         case types.SESSION_ERROR:
             return {
@@ -37,19 +34,9 @@ const reducer = (state = initialState, action) => {
                 user: null,
                 error: action.error,
                 isAuthenticated: false,
-                getProfile:{}
             };
         case types.SET_INITIAL_STATE:
             return initialState;
-        case types.GET_PROFILE:
-            return {
-                ...state,
-                isLoading: false,
-                user: null,
-                error: null,
-                isAuthenticated: false,
-                getProfile: action.payload
-            };
         default:
             return state;
     }
