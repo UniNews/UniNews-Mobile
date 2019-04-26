@@ -44,12 +44,12 @@ export const clearState = () => dispatch => {
 };
 export const getProfile = (uid) => dispatch =>{
     dispatch(sessionLoading());
-    return service.getProfile().then(response => response.json())
-        .then(response => dispatch(campusOk(response)))
-        .catch(err => dispatch(campusFail()));
+    return service.getProfile(uid).then(response => response.json())
+        .then(response => dispatch(getProfileID(response)))
+        .catch(err => dispatch(sessionClear()));
 };
-const getProfile = () =>({
-    type: types.GET_PROFILE
+const getProfileID = response =>({
+     type: types.GET_PROFILE, response
 })
 const sessionLoading = () => ({
     type: types.SESSION_LOADING
