@@ -21,7 +21,7 @@ const HomeStack = createStackNavigator({
         screen: NewsScreen
     },
 }, {
-        initialRouteName: 'Campus',
+        initialRouteName: 'News',
         headerMode: 'none',
     }
 );

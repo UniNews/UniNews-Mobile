@@ -1,5 +1,3 @@
-import constants from '../config/constants';
-
 export default {
 
     // getCampus: () => fetch(`${constants.API_URL}/campus`, {
