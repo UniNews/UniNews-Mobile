@@ -21,14 +21,6 @@ const campusSelect = (payload) => {
 export function getCampus() {
     return (dispatch) => {
         dispatch(fetch_campus());
-
-        // return service
-        //     .getCampus()
-        //     .then(response => response.json())
-        //     .then(response => dispatch(campusOk(response)))
-        //     .catch(err => dispatch(campusFail()));
-
-        // mock เฉยๆ
         let response = service.getCampus()
         dispatch(campusOk(response))
     };
