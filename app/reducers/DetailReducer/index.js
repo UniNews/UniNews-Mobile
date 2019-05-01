@@ -1,42 +1,35 @@
 import * as types from './actionTypes';
 
 const initialState = {
-    selectedCampus: "Official News",
     loading: false,
-    campus: [],
+    article: {},
     error: false,
-    completed: false,
+    completed: false
 };
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
-        case types.FETCH_CAMPUS:
+        case types.FETCH_ARTICLE:
             return {
                 ...state,
                 loading: true,
                 error: false,
-                campus: [],
+                article: {},
                 completed: false
             };
-        case types.SELECT_CAMPUS:
+        case types.ARTICLE_OK:
             return {
                 ...state,
-                selectedCampus: action.payload
-            }
-        case types.CAMPUS_OK:
-            return {
-                ...state,
-                // selectedCampus: action.payload[0].name, // default index
                 loading: false,
                 error: false,
-                campus: action.payload,
+                article: action.payload,
                 completed: true
             };
-        case types.CAMPUS_FAIL:
+        case types.ARTICLE_FAIL:
             return {
                 ...state,
                 loading: false,
-                campus: [],
+                article: {},
                 error: true,
                 completed: true
             };

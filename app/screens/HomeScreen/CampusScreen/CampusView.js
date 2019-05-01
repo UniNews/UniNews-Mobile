@@ -9,13 +9,13 @@ import Constants from '../../../config/constants'
 class CampusView extends React.Component {
 
     componentDidMount() {
-        const { getCampus } = this.props;
+        const { getCampus, currentCampus } = this.props;
         getCampus();
+        this.setState({ selectedCampus: currentCampus });
     }
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.currentCampus !== this.props.currentCampus) {
-            console.log("CALLED")
             this.setState({ selectedCampus: nextProps.currentCampus });
         }
     }
@@ -31,6 +31,7 @@ class CampusView extends React.Component {
     getNews = (campus) => {
         const { changeCampus } = this.props;
         changeCampus(campus)
+        this.props.navigation.goBack()
     }
 
     selectCampus = (campus) => {
@@ -65,21 +66,13 @@ class CampusView extends React.Component {
                             type='ionicon'
                             name={'ios-arrow-back'}
                             color={Constants.WHITE_COLOR}
+                            onPress={() => this.getNews(selectedCampus)}
                         />
                     }
                     centerComponent={
                         <Text style={styles.headerTitle}>
                             SELECT CAMPUS
                         </Text>
-                    }
-                    rightComponent={
-                        <Icon
-                            type='ionicon'
-                            name={isCampusChanged ? 'ios-arrow-dropright-circle' : 'ios-arrow-dropright'}
-                            size={29}
-                            color={Constants.WHITE_COLOR}
-                            onPress={() => this.getNews(selectedCampus)}
-                        />
                     }
                 />
                 <Text>

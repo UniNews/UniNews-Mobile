@@ -1,13 +1,5 @@
 export default {
-
-    // getCampus: () => fetch(`${constants.API_URL}/campus`, {
-    //     method: 'GET',
-    //     headers: {
-    //         Accept: 'application/json'
-    //     },
-    // })
-
-    // mock เฉยๆ
+    
     getCampus: () => {
         return [
             { name: "Official News", iconType: "material-community", iconName: "bullhorn" },

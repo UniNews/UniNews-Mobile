@@ -23,6 +23,7 @@ export function getCampus() {
         dispatch(fetch_campus());
         let response = service.getCampus()
         dispatch(campusOk(response))
+        // dispatch(campusSelect(response[0].name));
     };
 }
 export function selectCampus(campus) {

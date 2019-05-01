@@ -5,11 +5,14 @@ import { getArticles } from '../../../reducers/NewsReducer/actions';
 
 const mapStateToProps = state => {
     const { loading, articles, error, completed } = state.newsReducer;
+    const { selectedCampus } = state.campusReducer;
+
     return {
-        loading: loading,
+        // loading: loading,
         articles: articles,
         error: error,
         completed: completed,
+        selectedCampus: selectedCampus
     }
 };
 

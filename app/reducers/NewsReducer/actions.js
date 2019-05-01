@@ -19,8 +19,8 @@ export function getArticles(campus) {
         service.getArticles(campus)
             .then((res) => {
                 const articles = res;
-                console.log(articles)
-                dispatch(articlesOk(articles));
+                // console.log(articles)
+                dispatch(articlesOk(articles.result));
             }).catch(err => dispatch(articlesFail()));
     };
 }

@@ -1,10 +1,12 @@
 import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen'
+
 import CampusScreen from '../screens/HomeScreen/CampusScreen'
 import NewsScreen from '../screens/HomeScreen/NewsScreen'
+import DetailScreen from '../screens/HomeScreen/DetailScreen'
+
 import LoadingScreen from '../screens/LoadingScreen'
 import PostScreen from '../screens/PostScreen'
-
 import ProfileScreen from '../screens/ProfileScreen'
 
 import React from 'react';
@@ -20,6 +22,9 @@ const HomeStack = createStackNavigator({
     News: {
         screen: NewsScreen
     },
+    Detail: {
+        screen: DetailScreen
+    }
 }, {
         initialRouteName: 'News',
         headerMode: 'none',

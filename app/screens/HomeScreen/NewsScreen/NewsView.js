@@ -1,88 +1,102 @@
 import React from 'react';
-import { Card, Button, Image } from 'react-native-elements';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { Card, Button, Image, Header, Icon, SearchBar } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import {
-    AppRegistry,
     StyleSheet,
     Text,
-    TouchableOpacity,
     View,
     ScrollView,
-    LayoutAnimation
 } from 'react-native';
 import Constants from './../../../config/constants'
 
 import ArticleItem from '../../../components/AriticleItem/index'
 
-const users = [
-    {
-        title: 'Best of the best internship ever.',
-        author: 'Computer Faculty',
-        tag: 'Greek, Nerd',
-        location: 'World',
-        date: '25 May',
-        img: 'https://scontent.fbkk2-8.fna.fbcdn.net/v/t1.0-9/45097821_319625285294116_8959150974564302848_n.jpg?_nc_cat=103&_nc_ht=scontent.fbkk2-8.fna&oh=110cc58617887b58673abb38c946a815&oe=5D70412C'
-    }, {
-        title: 'Come and get your love',
-        author: 'Economic Faculty',
-        tag: 'Business, Finance',
-        location: 'Mar',
-        date: '30 May',
-        img: 'https://scontent.fbkk2-8.fna.fbcdn.net/v/t1.0-9/51193919_2937551282925527_1009368008058994688_o.jpg?_nc_cat=103&_nc_ht=scontent.fbkk2-8.fna&oh=da3568617a96de03cd2c732c5e7270be&oe=5D750FCE'
-    }
-];
-
 class NewsView extends React.Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            search: '',
+        };
     }
 
+    updateSearch = search => {
+        this.setState({ search });
+    };
+
+    getDetail = (id) => {
+        this
+            .props
+            .navigation
+            .navigate('Detail', { id });
+    };
 
     componentDidMount() {
-        const { getArticles } = this.props;
-        getArticles('social');
+        const { getArticles, selectedCampus } = this.props;
+        getArticles(selectedCampus);
     }
 
     render() {
-        const { articles } = this.props;
+        const { selectedCampus, articles, completed } = this.props;
+        const { search } = this.state;
 
         return (
+            <View style={styles.container}>
+                <Header
+                    containerStyle={{ borderBottomWidth: 0 }}
+                    backgroundColor={Constants.SECONDARY_COLOR}
+                    leftComponent={
+                        <Icon
+                            underlayColor='transparent'
+                            type='ionicon'
+                            name={'ios-archive'}
+                            color={Constants.WHITE_COLOR}
+                            size={27}
+                            onPress={() => this.props
+                                .navigation
+                                .navigate('Campus')}
+                        />
+                    }
+                    centerComponent={
+                        <Text style={styles.headerTitle}>
+                            {selectedCampus.toUpperCase()}
+                        </Text>
+                    }
+                    rightComponent={
+                        <Icon
+                            type='ionicon'
+                            name={'md-refresh'}
+                            size={29}
+                            color={Constants.WHITE_COLOR}
+                        />
+                    }
+                />
+                <SearchBar
+                    placeholder="Type Here..."
+                    onChangeText={this.updateSearch}
+                    value={search}
+                    round
+                    lightTheme
+                    showLoading
+                    inputContainerStyle={{ backgroundColor: '#fff' }}
+                    leftIconContainerStyle={{ backgroundColor: '#fff' }}
+                    containerStyle={{ borderBottomColor: 'transparent', borderTopColor: 'transparent' }}
+                />
 
-            <ScrollView style={styles.container}>
-                {/* {
-                        users.map((u, i) => {
-                            return (
-                                <ArticleItem
-                                    key={i}
-                                    title={u.title}
-                                    author={u.author}
-                                    img={u.img}
-                                    tag={u.tag}
-                                    date={u.date}
-                                    location={u.location}
-                                />);
-                        })
-                    } */}
-
-                {/* {
-                    articles.map((u, i) => {
-                        return (
-                            <Text>
-                                u
-                            </Text>
-                        );
-                    })
-                } */}
-
-                <Text>
-                    {articles}
-                </Text>
-
-
-            </ScrollView>
-
+                <ScrollView >
+                    {
+                        (completed) ?
+                            articles.map((u, i) => {
+                                return (
+                                    <ArticleItem
+                                        article={u}
+                                        event={this.getDetail}
+                                        key={u.id}
+                                    />);
+                            }) : <View></View>
+                    }
+                </ScrollView>
+            </View>
         );
     }
 }
@@ -90,16 +104,21 @@ class NewsView extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        // backgroundColor: Constants.PRIMARY_COLOR,
-        paddingTop: 20
+        // backgroundColor: 'grey',
+        // paddingTop: 20
     },
+    headerTitle: {
+        fontSize: 20,
+        color: '#fff',
+        fontFamily: 'Kanit-Regular'
+    }
 });
 
 NewsView.propTypes = {
     completed: PropTypes.bool.isRequired,
     getArticles: PropTypes.func.isRequired,
     articles: PropTypes.array.isRequired,
-    loading: PropTypes.bool.isRequired,
+    // loading: PropTypes.bool.isRequired,
     error: PropTypes.bool.isRequired,
 };
 

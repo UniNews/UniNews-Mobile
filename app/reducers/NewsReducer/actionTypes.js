@@ -1,3 +1,3 @@
-export const FETCH_ARTICLES = 'FETCH_CAMPUS';
-export const ARTICLES_OK = 'CAMPUS_OK';
-export const ARTICLES_FAIL = 'CAMPUS_FAIL';
+export const FETCH_ARTICLES = 'FETCH_ARTICLES';
+export const ARTICLES_OK = 'ARTICLES_OK';
+export const ARTICLES_FAIL = 'ARTICLES_FAIL';

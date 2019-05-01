@@ -7,7 +7,8 @@ import {
     Text,
     View
 } from 'react-native';
-import { Card, Button, Icon } from 'react-native-elements';
+import { Card, Icon } from 'react-native-elements';
+import { TouchableWithoutFeedback } from 'react-native';
 
 import Constants from './../../config/constants';
 
@@ -19,47 +20,82 @@ export default class ArticleItem extends React.Component {
     }
 
     render() {
+
+        const { article, event } = this.props;
+
         return (
-            <Card containerStyle={styles.block}
-                image={{ uri: this.props.img }}>
-                <View style={styles.bottomCardContainer}>
-                    <Text style={styles.title}>
-                        {this.props.title}
-                    </Text>
-                    <Icon type='evilicon' name='heart' color='grey' size={26} />
-                </View>
-
-                <Text style={styles.author}>
-                    {this.props.author}
-                </Text>
-
-                <View style={styles.iconContainer}>
-                    <Icon type='evilicon' name='tag' color='grey' />
-                    <Text style={styles.iconText}>
-                        {this.props.tag}
-                    </Text>
-                </View>
-
-                <View style={styles.bottomCardContainer}>
-                    <View style={styles.iconContainer}>
-                        <Icon type='evilicon' name='location' color='grey' />
-                        <Text style={styles.iconText}>
-                            {this.props.location}
+            <TouchableWithoutFeedback onPress={() => event(article.id)} >
+                <Card containerStyle={styles.block}
+                    image={{ uri: article.imgs }}>
+                    <View style={styles.topCardContainer}>
+                        <Text style={styles.title}>
+                            {article.title}
                         </Text>
+                        <Icon type='ionicon' name='md-heart-empty' color='grey' size={24} />
                     </View>
-                    <View style={styles.iconContainer}>
-                        <Icon type='evilicon' name='calendar' color='grey' />
-                        <Text style={styles.iconText}>
-                            {this.props.date}
-                        </Text>
+
+                    <Text style={styles.author}>
+                        {article.author}
+                    </Text>
+
+                    <View style={styles.middleCardContainer}>
+                        <View style={styles.iconContainer}>
+                            <Icon type='evilicon' name='tag' color='grey' />
+                            <Text style={styles.iconText}>
+                                {article.tag}
+                            </Text>
+                        </View>
+
+                        <View style={styles.iconContainer}>
+                            <Icon type='evilicon' name='location' color='grey' />
+                            <Text style={styles.iconText}>
+                                {article.location}
+                            </Text>
+                        </View>
+
                     </View>
-                </View>
-            </Card>
+
+                    <View style={styles.topCardContainer}>
+
+                        <View style={styles.iconContainer}>
+                            <Icon type='evilicon' name='calendar' color='grey' />
+                            <Text style={styles.iconText}>
+                                {article.timeStamp.split(" ")[0]}
+                            </Text>
+                        </View>
+                        <View style={styles.iconContainer}>
+                            <Icon type='evilicon' name='heart' color='grey' />
+                            <Text style={styles.iconText}>
+                                {article.rating.length} Likes
+                    </Text>
+                        </View>
+
+                        <View style={styles.iconContainer}>
+                            <Icon type='evilicon' name='comment' color='grey' />
+                            <Text style={styles.iconText}>
+                                {article.comments.length} Comments
+                    </Text>
+
+
+                        </View>
+
+                    </View>
+                </Card>
+            </TouchableWithoutFeedback>
+
         );
     }
 }
 
 const styles = StyleSheet.create({
+    topCardContainer: {
+        marginRight: 20,
+        justifyContent: 'space-between',
+        flexDirection: 'row'
+    },
+    middleCardContainer: {
+        flexDirection: 'row'
+    },
     bottomCardContainer: {
         justifyContent: 'space-between',
         flexDirection: 'row'
