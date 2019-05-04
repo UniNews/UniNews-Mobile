@@ -11,6 +11,11 @@ export default {
             .catch(error => error)
     },
 
+    getAllArticles: async () => {
+        return await axios.get(`${constants.API_URL}/news/`).then(response => response.data)
+            .catch(error => error)
+    },
+
     getArticle: async (id) => {
         return await axios.get(`${constants.API_URL}/news/${id}`).then(response => response.data)
             .catch(error => error)
