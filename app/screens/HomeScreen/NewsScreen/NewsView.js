@@ -40,6 +40,14 @@ class NewsView extends React.Component {
             .navigate('Detail', { id });
     };
 
+    componentWillReceiveProps(nextProps) {
+        const { getArticles, selectedCampus } = this.props;
+        if (nextProps.selectedCampus != selectedCampus) {
+            console.log("CALLED!!")
+            getArticles(nextProps.selectedCampus);
+        }
+    }
+
     componentDidMount() {
         const { getArticles, selectedCampus } = this.props;
         getArticles(selectedCampus);
