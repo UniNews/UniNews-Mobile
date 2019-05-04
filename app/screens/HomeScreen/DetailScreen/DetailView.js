@@ -3,7 +3,7 @@ import styles from './style.js';
 
 import { Image, Icon, Divider, ListItem, Avatar, Header, Button } from 'react-native-elements';
 import PropTypes from 'prop-types';
-import { View, Text, ScrollView, TextInput, KeyboardAvoidingView } from 'react-native';
+import { View, Text, ScrollView, TextInput, KeyboardAvoidingView, ActivityIndicator } from 'react-native';
 import Constants from '../../../config/constants'
 
 class DetailView extends React.Component {
@@ -14,7 +14,7 @@ class DetailView extends React.Component {
         this.state = {
             myComment: '',
             titleError: '',
-
+            favoriteIconName: 'md-heart-empty'
         };
     }
 
@@ -27,10 +27,19 @@ class DetailView extends React.Component {
         this.setState({ myComment });
     };
 
+    postFavorite = () => {
+        const { favoriteIconName } = this.state
+        this.props.postFavorite(this.props.navigation.state.params.id)
+        this.setState({
+            favoriteIconName: favoriteIconName === 'md-heart-empty' ? 'md-heart' : 'md-heart-empty',
+        })
+
+    }
+
     render() {
 
-        const { myComment } = this.state
-        const { article, completed } = this.props
+        const { myComment, favoriteIconName } = this.state
+        const { article, completed, loadingFavorite } = this.props
         return (
             <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
                 <ScrollView >
@@ -52,16 +61,28 @@ class DetailView extends React.Component {
                         </Text>
                         }
                         rightComponent={
-
-                            <Button
-                                icon={<Icon
+                            !loadingFavorite ?
+                                <Icon
                                     type='ionicon'
-                                    name={'md-heart-empty'}
+                                    name={favoriteIconName}
                                     size={29}
                                     color={Constants.WHITE_COLOR}
-                                />}
-                                type="clear"
-                            />
+                                    onPress={() => this.postFavorite()}
+                                /> :
+                                <ActivityIndicator color={Constants.WHITE_COLOR} />
+
+                            // <Button
+                            //     icon={<Icon
+                            //         type='ionicon'
+                            //         name={'md-heart-empty'}
+                            //         size={29}
+                            //         color={Constants.WHITE_COLOR}
+                            //     />}
+                            //     type="clear"
+                            //     loading={loadingFavorite}
+                            // onPress={() =>
+                            //     this.props.postFavorite(this.props.navigation.state.params.id)}
+                            // />
 
                         }
                     />
@@ -174,6 +195,10 @@ DetailView.propTypes = {
     completed: PropTypes.bool.isRequired,
     loading: PropTypes.bool.isRequired,
     error: PropTypes.bool.isRequired,
+    postFavorite: PropTypes.func.isRequired,
+    loadingFavorite: PropTypes.bool.isRequired,
+    errorFavorite: PropTypes.bool.isRequired,
+    completedFavorite: PropTypes.bool.isRequired,
 };
 
 

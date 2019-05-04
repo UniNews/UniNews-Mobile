@@ -1,19 +1,23 @@
 import { connect } from 'react-redux';
 import DetailView from './DetailView';
 import { getArticle } from '../../../reducers/DetailReducer/actions';
+import { postFavorite } from '../../../reducers/FavoriteReducer/actions'
 
 
 const mapStateToProps = state => {
-    const { loading, article, error, completed } = state.detailReducer;
     return {
-        loading: loading,
-        article: article,
-        error: error,
-        completed: completed
+        loading: state.detailReducer.loading,
+        article: state.detailReducer.article,
+        error: state.detailReducer.error,
+        completed: state.detailReducer.completed,
+        loadingFavorite: state.favoriteReducer.loading,
+        errorFavorite: state.favoriteReducer.error,
+        completedFavorite: state.favoriteReducer.completed,
     }
 };
 
 const mapDispatchToProps = {
+    postFavorite: postFavorite,
     getArticle: getArticle
 };
 
