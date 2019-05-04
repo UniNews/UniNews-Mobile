@@ -70,20 +70,6 @@ class DetailView extends React.Component {
                                     onPress={() => this.postFavorite()}
                                 /> :
                                 <ActivityIndicator color={Constants.WHITE_COLOR} />
-
-                            // <Button
-                            //     icon={<Icon
-                            //         type='ionicon'
-                            //         name={'md-heart-empty'}
-                            //         size={29}
-                            //         color={Constants.WHITE_COLOR}
-                            //     />}
-                            //     type="clear"
-                            //     loading={loadingFavorite}
-                            // onPress={() =>
-                            //     this.props.postFavorite(this.props.navigation.state.params.id)}
-                            // />
-
                         }
                     />
                     {

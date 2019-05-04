@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Button, Image, Header, Icon, SearchBar } from 'react-native-elements';
+import { Header, Icon, SearchBar } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import {
     StyleSheet,
@@ -43,7 +43,6 @@ class NewsView extends React.Component {
     componentWillReceiveProps(nextProps) {
         const { getArticles, selectedCampus } = this.props;
         if (nextProps.selectedCampus != selectedCampus) {
-            console.log("CALLED!!")
             getArticles(nextProps.selectedCampus);
         }
     }
