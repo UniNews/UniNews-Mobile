@@ -4,9 +4,10 @@ import RegisterScreen from '../screens/RegisterScreen'
 import CampusScreen from '../screens/HomeScreen/CampusScreen'
 import NewsScreen from '../screens/HomeScreen/NewsScreen'
 import DetailScreen from '../screens/HomeScreen/DetailScreen'
+import AddPostScreen from '../screens/HomeScreen/AddPostScreen'
 
 import LoadingScreen from '../screens/LoadingScreen'
-import PostScreen from '../screens/PostScreen'
+import SearchScreem from '../screens/SearchScreen'
 import ProfileScreen from '../screens/ProfileScreen'
 
 import React from 'react';
@@ -24,6 +25,9 @@ const HomeStack = createStackNavigator({
     },
     Detail: {
         screen: DetailScreen
+    },
+    AddPost: {
+        screen: AddPostScreen
     }
 }, {
         initialRouteName: 'News',
@@ -46,8 +50,8 @@ const AuthStack = createStackNavigator({
 
 const MainTab = createBottomTabNavigator({
     Home: HomeStack,
-    Post: {
-        screen: PostScreen
+    Search: {
+        screen: SearchScreem
     },
     Profile: {
         screen: ProfileScreen
@@ -63,9 +67,9 @@ const MainTab = createBottomTabNavigator({
                 if (routeName === 'Home') {
                     iconType = 'material-community'
                     iconName = `home${focused ? '' : '-outline'}`
-                } else if (routeName === 'Post') {
-                    iconType = 'material-community'
-                    iconName = `checkbox-multiple-blank${focused ? '' : '-outline'}`
+                } else if (routeName === 'Search') {
+                    iconType = 'ionicon'
+                    iconName = `ios-search`
                 }
                 else if (routeName === 'Profile') {
                     iconType = 'material'
