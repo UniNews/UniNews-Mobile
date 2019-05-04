@@ -6,6 +6,7 @@ import {
     Text,
     View,
     ScrollView,
+    RefreshControl
 } from 'react-native';
 import Constants from './../../../config/constants'
 
@@ -17,7 +18,15 @@ class NewsView extends React.Component {
         super(props);
         this.state = {
             search: '',
+            refreshing: false,
         };
+    }
+
+    _onRefresh = () => {
+        this.setState({ refreshing: true });
+        const { getArticles, selectedCampus } = this.props;
+        getArticles(selectedCampus)
+        this.setState({ refreshing: false });
     }
 
     updateSearch = search => {
@@ -64,10 +73,14 @@ class NewsView extends React.Component {
                     }
                     rightComponent={
                         <Icon
+                            underlayColor='transparent'
                             type='ionicon'
-                            name={'md-refresh'}
+                            name={'md-add-circle'}
                             size={29}
                             color={Constants.WHITE_COLOR}
+                            onPress={() => this.props
+                                .navigation
+                                .navigate('AddPost')}
                         />
                     }
                 />
@@ -82,20 +95,28 @@ class NewsView extends React.Component {
                     leftIconContainerStyle={{ backgroundColor: '#fff' }}
                     containerStyle={{ borderBottomColor: 'transparent', borderTopColor: 'transparent' }}
                 />
+                <View>
+                    <ScrollView
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={this.state.refreshing}
+                                onRefresh={this._onRefresh}
+                            />
+                        }>
+                        {
+                            (completed) ?
+                                articles.map((u, i) => {
+                                    return (
+                                        <ArticleItem
+                                            article={u}
+                                            event={this.getDetail}
+                                            key={u.id}
+                                        />);
+                                }) : <View></View>
+                        }
+                    </ScrollView>
+                </View>
 
-                <ScrollView >
-                    {
-                        (completed) ?
-                            articles.map((u, i) => {
-                                return (
-                                    <ArticleItem
-                                        article={u}
-                                        event={this.getDetail}
-                                        key={u.id}
-                                    />);
-                            }) : <View></View>
-                    }
-                </ScrollView>
             </View>
         );
     }
@@ -104,13 +125,14 @@ class NewsView extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        // backgroundColor: 'grey',
-        // paddingTop: 20
     },
     headerTitle: {
         fontSize: 20,
         color: '#fff',
         fontFamily: 'Kanit-Regular'
+    },
+    newsContainer: {
+
     }
 });
 

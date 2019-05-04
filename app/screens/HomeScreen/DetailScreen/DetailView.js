@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './style.js';
 
-import { Image, Icon, Divider, ListItem, Avatar, Header } from 'react-native-elements';
+import { Image, Icon, Divider, ListItem, Avatar, Header, Button } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import { View, Text, ScrollView, TextInput, KeyboardAvoidingView } from 'react-native';
 import Constants from '../../../config/constants'
@@ -13,6 +13,8 @@ class DetailView extends React.Component {
         super(props);
         this.state = {
             myComment: '',
+            titleError: '',
+
         };
     }
 
@@ -50,12 +52,17 @@ class DetailView extends React.Component {
                         </Text>
                         }
                         rightComponent={
-                            <Icon
-                                type='ionicon'
-                                name={'md-heart-empty'}
-                                size={29}
-                                color={Constants.WHITE_COLOR}
+
+                            <Button
+                                icon={<Icon
+                                    type='ionicon'
+                                    name={'md-heart-empty'}
+                                    size={29}
+                                    color={Constants.WHITE_COLOR}
+                                />}
+                                type="clear"
                             />
+
                         }
                     />
                     {
