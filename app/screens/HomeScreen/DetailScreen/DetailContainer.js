@@ -3,7 +3,6 @@ import DetailView from './DetailView';
 import { getArticle } from '../../../reducers/DetailReducer/actions';
 import { postFavorite } from '../../../reducers/FavoriteReducer/actions'
 
-
 const mapStateToProps = state => {
     return {
         loading: state.detailReducer.loading,
@@ -13,6 +12,7 @@ const mapStateToProps = state => {
         loadingFavorite: state.favoriteReducer.loading,
         errorFavorite: state.favoriteReducer.error,
         completedFavorite: state.favoriteReducer.completed,
+        user: state.authReducer.user
     }
 };
 

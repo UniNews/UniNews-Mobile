@@ -13,8 +13,8 @@ class DetailView extends React.Component {
         super(props);
         this.state = {
             myComment: '',
-            titleError: '',
-            favoriteIconName: 'md-heart-empty'
+            liked: false,
+            likeLoaded: false,
         };
     }
 
@@ -23,25 +23,48 @@ class DetailView extends React.Component {
         getArticle(this.props.navigation.state.params.id);
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (this.state.likeLoaded != nextProps.completed) {
+            const { article, user } = nextProps;
+            console.log("******************")
+
+            console.log(article)
+            var found = false;
+            for (var i = 0; i < article.rating.length; i++) {
+                if (article.rating[i].user_id == user.user_id) {
+                    found = true;
+                    break;
+                }
+            }
+            this.setState({
+                likeLoaded: true,
+                liked: found,
+            });
+
+        }
+    }
+
     updateMyCommentText = myComment => {
         this.setState({ myComment });
     };
 
     postFavorite = () => {
-        const { favoriteIconName } = this.state
+        const { liked } = this.state
         this.props.postFavorite(this.props.navigation.state.params.id)
         this.setState({
-            favoriteIconName: favoriteIconName === 'md-heart-empty' ? 'md-heart' : 'md-heart-empty',
+            liked: !liked,
         })
 
     }
 
     render() {
 
-        const { myComment, favoriteIconName } = this.state
+        const { myComment, liked, likeLoaded } = this.state
         const { article, completed, loadingFavorite } = this.props
         return (
             <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
+
+
                 <ScrollView >
 
                     <Header
@@ -61,15 +84,17 @@ class DetailView extends React.Component {
                         </Text>
                         }
                         rightComponent={
-                            !loadingFavorite ?
+                            loadingFavorite || !likeLoaded
+                                ?
+                                <ActivityIndicator color={Constants.WHITE_COLOR} />
+                                :
                                 <Icon
                                     type='ionicon'
-                                    name={favoriteIconName}
+                                    name={!liked ? 'md-heart-empty' : 'md-heart'}
                                     size={29}
                                     color={Constants.WHITE_COLOR}
                                     onPress={() => this.postFavorite()}
-                                /> :
-                                <ActivityIndicator color={Constants.WHITE_COLOR} />
+                                />
                         }
                     />
                     {
@@ -185,6 +210,7 @@ DetailView.propTypes = {
     loadingFavorite: PropTypes.bool.isRequired,
     errorFavorite: PropTypes.bool.isRequired,
     completedFavorite: PropTypes.bool.isRequired,
+    user: PropTypes.object.isRequired,
 };
 
 
