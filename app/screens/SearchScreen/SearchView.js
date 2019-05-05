@@ -59,7 +59,7 @@ class SearchView extends React.Component {
                     containerStyle={{ backgroundColor: constants.SECONDARY_COLOR, borderBottomColor: 'transparent', borderTopColor: 'transparent' }}
                 />
 
-                {
+                {/* {
                     loading ?
                         <ActivityIndicator
                             size={40}
@@ -73,7 +73,9 @@ class SearchView extends React.Component {
                                     key={u.id}
                                 />);
                         })
-                }
+                } */}
+
+                
                 {/* <Button
                     title="TEST"
                     onPress={() => { this.props.search("Asian") }} /> */}
