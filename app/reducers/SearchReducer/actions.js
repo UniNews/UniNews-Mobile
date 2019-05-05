@@ -5,8 +5,8 @@ const search_request = () => {
     return { type: types.SEARCH_REQUEST };
 }
 
-const searchOk = (payload) => {
-    return { type: types.SEARCH_OK, payload };
+const searchOk = (payload, text) => {
+    return { type: types.SEARCH_OK, payload, text };
 }
 
 const searchFail = () => {
@@ -19,21 +19,18 @@ export function search(text) {
         service.getAllArticles()
             .then((res) => {
                 const articles = res.result;
-                console.log("CALLED")
-
+                // console.log(articles)
                 const newData = articles.filter(item => {
-                    const itemData = `${item[Object.keys(item)[0]].title.toUpperCase()}   
-                    ${item[Object.keys(item)[0]].user_id.toUpperCase()}
-                    ${item[Object.keys(item)[0]].tag.join('\n').toUpperCase()}`;
+                    const itemData = `${item.title.toUpperCase()}   
+                    ${item.user_id.toUpperCase()}
+                    ${item.tag.join('\n').toUpperCase()}`;
                     // console.log("*****************************")
                     // console.log(itemData)
-
                     const queryData = text.toUpperCase();
                     return itemData.indexOf(queryData) > -1;
                 });
                 // console.log(newData)
-
-                dispatch(searchOk(newData));
+                dispatch(searchOk(newData, text));
             }).catch(err => dispatch(searchFail()));
     };
 }

@@ -86,9 +86,9 @@ const MainTab = createBottomTabNavigator({
 
 export default createAppContainer(createSwitchNavigator(
     {
-        // Loading: {
-        //     screen: LoadingScreen
-        // },
+        Loading: {
+            screen: LoadingScreen
+        },
         Auth: {
             screen: AuthStack
         },

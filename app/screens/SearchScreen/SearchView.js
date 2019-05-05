@@ -3,11 +3,13 @@ import {
     StyleSheet,
     View,
     Text,
-    ActivityIndicator
+    ActivityIndicator,
+    ScrollView
 } from 'react-native';
-import { Header, Button, SearchBar } from 'react-native-elements';
+import { Header, Icon, SearchBar } from 'react-native-elements';
 import constants from './../../config/constants';
 import ArticleItem from '../../components/AriticleItem'
+import Constants from './../../config/constants'
 
 import PropTypes from 'prop-types';
 
@@ -23,19 +25,19 @@ class SearchView extends React.Component {
 
     updateSearch = text => {
         const { search } = this.props;
-        const { searchText } = this.state;
-
         this.setState({ searchText: text })
-        if (this.typingTimeout) {
-            clearTimeout(this.typingTimeout);
+        if (text != '') {
+            if (this.typingTimeout) {
+                clearTimeout(this.typingTimeout);
+            }
+            this.typingTimeout = setTimeout((event) => search(text), 1000)
         }
-        this.typingTimeout = setTimeout((event) => search(searchText), 500)
     };
 
 
     render() {
         const { searchText } = this.state;
-        const { loading, result } = this.props;
+        const { loading, result, searchedText } = this.props;
 
         return (
             <View style={styles.container}>
@@ -58,24 +60,29 @@ class SearchView extends React.Component {
                     leftIconContainerStyle={{ backgroundColor: '#fff' }}
                     containerStyle={{ backgroundColor: constants.SECONDARY_COLOR, borderBottomColor: 'transparent', borderTopColor: 'transparent' }}
                 />
+                <ScrollView>
+                    <Text>
+                        {searchText} and {searchedText}
+                    </Text>
+                    {
+                        searchText == '' ? null :
+                            loading || searchedText != searchText ?
+                                <ActivityIndicator
+                                    size={40}
+                                    style={styles.activityIndicator} />
+                                :
+                                result.map((u, i) => {
+                                    return (
+                                        <ArticleItem
+                                            article={u}
+                                            // event={this.getDetail}
+                                            key={u.id}
+                                        />);
+                                })
+                    }
+                </ScrollView>
 
-                {/* {
-                    loading ?
-                        <ActivityIndicator
-                            size={40}
-                            style={styles.activityIndicator} />
-                        :
-                        result.map((u, i) => {
-                            return (
-                                <ArticleItem
-                                    article={u}
-                                    // event={this.getDetail}
-                                    key={u.id}
-                                />);
-                        })
-                } */}
 
-                
                 {/* <Button
                     title="TEST"
                     onPress={() => { this.props.search("Asian") }} /> */}

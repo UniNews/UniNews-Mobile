@@ -4,7 +4,8 @@ const initialState = {
     loading: false,
     result: [],
     error: false,
-    completed: false
+    completed: false,
+    searchedText: '',
 };
 
 const reducer = (state = initialState, action) => {
@@ -23,7 +24,8 @@ const reducer = (state = initialState, action) => {
                 loading: false,
                 error: false,
                 result: action.payload,
-                completed: true
+                completed: true,
+                searchedText: action.text
             };
         case types.SEARCH_FAIL:
             return {
