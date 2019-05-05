@@ -31,10 +31,12 @@ export default class ArticleItem extends React.Component {
                         <Text style={styles.title}>
                             {article.title}
                         </Text>
-                        <Icon type='ionicon' name='md-heart-empty' color='grey' size={24} />
+                        
+                            {/* <Icon type='ionicon' name='md-heart-empty' color='grey' size={24} /> : */}
+                        
                     </View>
 
-                    <Text style={styles.author}>
+                    <Text style={styles.ahuthor}>
                         {article.author}
                     </Text>
 
@@ -89,7 +91,7 @@ export default class ArticleItem extends React.Component {
 
 const styles = StyleSheet.create({
     topCardContainer: {
-        marginRight: 20,
+        // marginRight: 20,
         justifyContent: 'space-between',
         flexDirection: 'row'
     },
