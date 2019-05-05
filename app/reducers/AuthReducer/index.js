@@ -4,7 +4,8 @@ const initialState = {
     user: null,
     error: null,
     isLoading: false,
-    isAuthenticated: false,
+    logged: false,
+    registered: false
 };
 
 const reducer = (state = initialState, action) => {
@@ -17,15 +18,17 @@ const reducer = (state = initialState, action) => {
                 isLoading: false,
                 user: action.user,
                 error: null,
-                isAuthenticated: true,
+                logged: true,
+                registered: false
             };
         case types.SIGNUP_SUCCESS:
             return {
                 ...state,
                 isLoading: false,
-                user: action.user,
+                // user: action.user,
                 error: null,
-                isAuthenticated: false,
+                logged: false,
+                registered: true
             };
         case types.SESSION_ERROR:
             return {
@@ -33,7 +36,8 @@ const reducer = (state = initialState, action) => {
                 isLoading: false,
                 user: null,
                 error: action.error,
-                isAuthenticated: false,
+                logged: false,
+                registered: false
             };
         case types.SET_INITIAL_STATE:
             return initialState;

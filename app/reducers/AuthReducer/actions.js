@@ -1,6 +1,6 @@
 import firebaseService from '../../config/firebase';
 import * as types from './actionTypes';
-import service from '../../services/user';
+import userService from '../../services/user'
 
 export const loginByEmail = (email, password) => dispatch => {
     dispatch(sessionLoading());
@@ -8,12 +8,21 @@ export const loginByEmail = (email, password) => dispatch => {
         .auth()
         .signInWithEmailAndPassword(email, password)
         .then(user => {
-            getProfile(user.uid)
-            dispatch(sessionSuccess(user));
+            const uid = user.user.uid
+            userService.getProfile(uid).then((res) => {
+                dispatch(sessionSuccess(res.result));
+            }).catch(err => dispatch(sessionError(err)));
         })
         .catch(error => {
             dispatch(sessionError(error.message));
         });
+};
+
+export const autoLogin = (uid) => dispatch => {
+    dispatch(sessionLoading());
+    userService.getProfile(uid).then((res) => {
+        dispatch(sessionSuccess(res.result));
+    }).catch(err => dispatch(sessionError(err)));
 };
 
 export const signupByEmail = (email, password, displayName) => dispatch => {
@@ -22,7 +31,15 @@ export const signupByEmail = (email, password, displayName) => dispatch => {
     firebaseService
         .auth()
         .createUserWithEmailAndPassword(email, password)
-        .then(user => dispatch(signupSuccess(user)))
+        .then(usr => {
+            userService.getToken().then(function (idToken) {
+                userService.register(idToken, displayName).then((res) => {
+                    dispatch(signupSuccess())
+                }).catch(err => dispatch(sessionError(err)));
+            }).catch(function (error) {
+                dispatch(sessionError(error.message))
+            });
+        })
         .catch(error => {
             dispatch(sessionError(error.message));
         });
@@ -45,16 +62,6 @@ export const clearState = () => dispatch => {
     dispatch(sessionClear());
 };
 
-const getProfile = (uid) => {
-    return service.getProfile(uid).then(response => response.json())
-        .then(response => {
-            // map field to user object. Ex,
-            user.displayName = response.displayName
-            // etc.
-        })
-        .catch(err => dispatch(sessionError(err)));
-};
-
 const sessionLoading = () => ({
     type: types.SESSION_LOADING
 });
@@ -64,9 +71,8 @@ const sessionSuccess = user => ({
     user
 });
 
-const signupSuccess = user => ({
+const signupSuccess = () => ({
     type: types.SIGNUP_SUCCESS,
-    user
 });
 
 const sessionError = error => ({
