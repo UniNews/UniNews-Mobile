@@ -8,8 +8,12 @@ import firebase from './../../config/firebase'
 class LoadingView extends React.Component {
 
     componentDidMount() {
+
+        const { autoLogin } = this.props
+
         firebase.auth().onAuthStateChanged(user => {
-            console.log(user)
+            console.log(user.uid)
+            autoLogin(user.uid)
             this.props.navigation.navigate(user ? 'Main' : 'Auth')
         })
     }
@@ -33,7 +37,8 @@ const styles = StyleSheet.create({
 });
 
 LoadingView.propTypes = {
-
+    isLoading: PropTypes.bool.isRequired,
+    autoLogin: PropTypes.func.isRequired,
 };
 
 
