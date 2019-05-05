@@ -4,11 +4,11 @@ import { signupByEmail, clearState } from '../../reducers/AuthReducer/actions';
 
 
 const mapStateToProps = state => {
-    const { isLoading, error, isAuthenticated } = state.authReducer;
+    const { isLoading, error, registered } = state.authReducer;
     return {
-        isLoading: isLoading,
+        loading: isLoading,
         error: error,
-        isAuthenticated: isAuthenticated
+        registered: registered
     }
 }
 
