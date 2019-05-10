@@ -11,7 +11,7 @@ import {
     ScrollView,
     Picker,
     TouchableWithoutFeedback,
-    KeyboardAvoidingView
+    KeyboardAvoidingView,
 } from 'react-native';
 
 import MultipleInput from './../../../components/MultipleInput';
@@ -41,6 +41,12 @@ class PostView extends React.Component {
             titleError: '',
             descriptionError: ''
         };
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.completed) {
+            this.props.navigation.goBack();
+        }
     }
 
     checkIsEnabled(isEnabled) {
@@ -116,6 +122,7 @@ class PostView extends React.Component {
     }
 
     render() {
+        console.disableYellowBox = true;
 
         const { items, loading } = this.props;
         const { isEnabled, message, title, description, titleError, descriptionError, image, uploading } = this.state;
@@ -153,8 +160,6 @@ class PostView extends React.Component {
                             />
                     }
                 />
-
-
 
                 <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
                     <ScrollView
