@@ -57,7 +57,7 @@ class NewsView extends React.Component {
     }
 
     render() {
-        const { selectedCampus, articles, completed } = this.props;
+        const { selectedCampus, articles, completed, profile } = this.props;
 
         return (
             <View style={styles.container}>
@@ -82,16 +82,20 @@ class NewsView extends React.Component {
                         </Text>
                     }
                     rightComponent={
-                        <Icon
-                            underlayColor='transparent'
-                            type='ionicon'
-                            name={'md-add-circle'}
-                            size={29}
-                            color={Constants.WHITE_COLOR}
-                            onPress={() => this.props
-                                .navigation
-                                .navigate('AddPost')}
-                        />
+                        (selectedCampus == 'Official News' && profile.permission) || (selectedCampus != 'Official News')
+                            ?
+                            <Icon
+                                underlayColor='transparent'
+                                type='ionicon'
+                                name={'md-add-circle'}
+                                size={29}
+                                color={Constants.WHITE_COLOR}
+                                onPress={() => this.props
+                                    .navigation
+                                    .navigate('AddPost')}
+                            />
+                            :
+                            null
                     }
                 />
                 {
@@ -166,6 +170,7 @@ NewsView.propTypes = {
     articles: PropTypes.array.isRequired,
     // loading: PropTypes.bool.isRequired,
     error: PropTypes.bool.isRequired,
+    profile: PropTypes.object.isRequired
 };
 
 
