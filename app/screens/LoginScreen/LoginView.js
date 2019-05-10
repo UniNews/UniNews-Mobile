@@ -44,6 +44,7 @@ class LoginView extends React.Component {
             PlaceholderContent={<ActivityIndicator />}
           />
           <Input
+            autoCorrect={false}
             placeholderTextColor={Constants.WHITE_COLOR}
             inputStyle={{ color: Constants.WHITE_COLOR }}
             placeholder='Email'
@@ -55,6 +56,8 @@ class LoginView extends React.Component {
           />
 
           <Input
+            autoCorrect={false}
+            secureTextEntry={true}
             placeholderTextColor={Constants.WHITE_COLOR}
             inputStyle={{ color: Constants.WHITE_COLOR }}
             placeholder='Password'
@@ -126,9 +129,9 @@ class LoginView extends React.Component {
             justifyContent: 'space-around',
             flexDirection: 'row',
           }}>
-            <TouchableOpacity activeOpacity={0.6}>
+            {/* <TouchableOpacity activeOpacity={0.6}>
               <Text style={styles.createAccountBtn}>Forget Password?</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <TouchableOpacity onPress={() => {
               this.props.clearState()
               this.props.navigation.navigate('Register')

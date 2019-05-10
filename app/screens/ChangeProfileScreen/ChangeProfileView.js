@@ -160,6 +160,7 @@ class ChangeProfileScreen extends Component {
                             </View>
                             <View style={styles.inputContainer}>
                                 <Input
+                                    autoCorrect={false}
                                     label={"Display Name"}
                                     value={displayName}
                                     onChangeText={(text) => {
@@ -167,6 +168,7 @@ class ChangeProfileScreen extends Component {
                                     }}
                                 />
                                 <Input
+                                    autoCorrect={false}
                                     containerStyle={{ paddingTop: 20 }}
                                     label={"About Me"}
                                     value={aboutMe}

@@ -34,6 +34,7 @@ class TxtInput extends Component {
     }
 
     render = () => <Input
+        autoCorrect={false}
         labelStyle={[styles.labelStyle, this.state.inputStyle]}
         label={this.props.label}
         placeholder={this.props.placeholder}

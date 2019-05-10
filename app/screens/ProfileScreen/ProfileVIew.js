@@ -37,11 +37,11 @@ class ProfileView extends React.Component {
 
             refreshing: false,
             loading: false,
+            initialized: false,
         }
     }
 
     _onRefresh = () => {
-        console.log("CALLED")
         const { getProfile, profile } = this.props
         const { isRoot } = this.state
         this.setState({ refreshing: true, loading: true });
@@ -75,50 +75,50 @@ class ProfileView extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        const { isRoot } = this.state;
-        if (isRoot && nextProps.completed && nextProps.profile) {
-            this.setState({
-                displayName: nextProps.profile.displayName,
-                aboutMe: nextProps.profile.aboutMe,
-                following: nextProps.profile.following_detail ? nextProps.profile.following_detail : [],
-                follower: nextProps.profile.follower_detail ? nextProps.profile.follower_detail : [],
-                posts: nextProps.profile.post_detail ? nextProps.profile.post_detail : [],
-                liked: nextProps.profile.like_detail ? nextProps.profile.like_detail : [],
-                error: '',
-                img: nextProps.profile.img,
-                isRoot: true,
-                uid: nextProps.profile.user_id,
-                loading: false,
-            });
-        }
-        else if (!isRoot && nextProps.completed && nextProps.profile) {
-            const { id } = this.props.navigation.state.params;
-            userService.getProfile(id).then((res) => {
+        const { isRoot, initialized } = this.state;
+        if (initialized)
+            if (isRoot && nextProps.completed && nextProps.profile) {
                 this.setState({
-                    displayName: res.result.displayName,
-                    aboutMe: res.result.aboutMe,
-                    following: res.result.following_detail ? res.result.following_detail : [],
-                    follower: res.result.follower_detail ? res.result.follower_detail : [],
-                    posts: res.result.post_detail ? res.result.post_detail : [],
-                    liked: res.result.like_detail ? res.result.like_detail : [],
+                    displayName: nextProps.profile.displayName,
+                    aboutMe: nextProps.profile.aboutMe,
+                    following: nextProps.profile.following_detail ? nextProps.profile.following_detail : [],
+                    follower: nextProps.profile.follower_detail ? nextProps.profile.follower_detail : [],
+                    posts: nextProps.profile.post_detail ? nextProps.profile.post_detail : [],
+                    liked: nextProps.profile.like_detail ? nextProps.profile.like_detail : [],
                     error: '',
-                    img: res.result.img,
-                    isRoot: false,
-                    uid: res.result.user_id,
+                    img: nextProps.profile.img,
+                    isRoot: true,
+                    uid: nextProps.profile.user_id,
                     loading: false,
-                })
-            }).catch(err =>
-                this.setState({
-                    error: 'No user',
-                    loading: false,
-                },
-                )
-            );
-        }
+                });
+            }
+            else if (!isRoot && nextProps.completed && nextProps.profile) {
+                const { id } = this.props.navigation.state.params;
+                userService.getProfile(id).then((res) => {
+                    this.setState({
+                        displayName: res.result.displayName,
+                        aboutMe: res.result.aboutMe,
+                        following: res.result.following_detail ? res.result.following_detail : [],
+                        follower: res.result.follower_detail ? res.result.follower_detail : [],
+                        posts: res.result.post_detail ? res.result.post_detail : [],
+                        liked: res.result.like_detail ? res.result.like_detail : [],
+                        error: '',
+                        img: res.result.img,
+                        isRoot: false,
+                        uid: res.result.user_id,
+                        loading: false,
+                    })
+                }).catch(err =>
+                    this.setState({
+                        error: 'No user',
+                        loading: false,
+                    },
+                    )
+                );
+            }
     }
 
     componentDidMount() {
-
         const { profile } = this.props;
         this.setState({ loading: true });
         console.log(this.props.navigation.state.params)
@@ -135,6 +135,7 @@ class ProfileView extends React.Component {
                 isRoot: true,
                 uid: profile.user_id,
                 loading: false,
+                initialized: true
             });
         } else {
             const { id } = this.props.navigation.state.params;
@@ -152,7 +153,7 @@ class ProfileView extends React.Component {
                     isRoot: false,
                     uid: res.result.user_id,
                     loading: false,
-
+                    initialized: true
                 })
             }).catch(err =>
                 this.setState({
@@ -177,7 +178,6 @@ class ProfileView extends React.Component {
     followUser = (uid) => {
         const { followingUser } = this.props
         followingUser(uid)
-        this._onRefresh()
     }
 
     getProfile = (id) => {
@@ -430,7 +430,8 @@ const styles = StyleSheet.create({
     headerTitle: {
         fontSize: 20,
         color: '#fff',
-        fontFamily: 'Kanit-Regular'
+        fontFamily: 'Kanit-Regular',
+        textAlign: 'center'
     },
     nameText: {
         fontFamily: 'Kanit-Regular',

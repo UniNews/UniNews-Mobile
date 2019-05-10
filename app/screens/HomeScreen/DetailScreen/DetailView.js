@@ -200,6 +200,7 @@ class DetailView extends React.Component {
                                         </Text>
                                         <View style={styles.commentButton}>
                                             <TextInput
+                                                autoCorrect={false}
                                                 value={myComment}
                                                 onChangeText={this.updateMyCommentText}
                                                 placeholder='Type here...'

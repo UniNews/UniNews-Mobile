@@ -54,6 +54,7 @@ class RegisterView extends React.Component {
                         enabled>
 
                         <Input
+                            autoCorrect={false}
                             placeholderTextColor={Constants.WHITE_COLOR}
                             inputStyle={{ color: Constants.WHITE_COLOR }}
                             placeholder='Name'
@@ -67,6 +68,7 @@ class RegisterView extends React.Component {
                         />
 
                         <Input
+                            autoCorrect={false}
                             placeholderTextColor={Constants.WHITE_COLOR}
                             inputStyle={{ color: Constants.WHITE_COLOR }}
                             placeholder='Email'
@@ -79,6 +81,7 @@ class RegisterView extends React.Component {
                         />
 
                         <Input
+                            secureTextEntry={true}
                             placeholderTextColor={Constants.WHITE_COLOR}
                             inputStyle={{ color: Constants.WHITE_COLOR }}
                             placeholder='Password'
@@ -91,6 +94,7 @@ class RegisterView extends React.Component {
                         />
 
                         <Input
+                            secureTextEntry={true}
                             placeholderTextColor={Constants.WHITE_COLOR}
                             inputStyle={{ color: Constants.WHITE_COLOR }}
                             placeholder='Repeat Password'
