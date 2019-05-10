@@ -11,6 +11,7 @@ export default StyleSheet.create({
         fontFamily: 'Kanit-Regular'
     },
     topCardContainer: {
+        paddingTop: 5,
         flexDirection: 'row',
         justifyContent: 'space-between',
     },
@@ -19,6 +20,7 @@ export default StyleSheet.create({
         fontFamily: 'Kanit-Regular',
     },
     author: {
+        paddingLeft: 10,
         fontSize: 20,
         fontFamily: 'Kanit-Regular',
         color: Constants.PRIMARY_COLOR,
@@ -41,7 +43,11 @@ export default StyleSheet.create({
         fontSize: 20,
         fontFamily: 'Kanit-Regular',
     },
-    comment: {
+    otherComment: {
+        fontFamily: 'Kanit-Regular',
+    },
+    myComment: {
+        color: Constants.PRIMARY_COLOR,
         fontFamily: 'Kanit-Regular',
     },
     myCommentContainer: {

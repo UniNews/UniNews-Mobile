@@ -3,7 +3,7 @@ import styles from './style.js';
 
 import { Image, Icon, Divider, ListItem, Avatar, Header, Button } from 'react-native-elements';
 import PropTypes from 'prop-types';
-import { View, Text, ScrollView, TextInput, KeyboardAvoidingView, ActivityIndicator } from 'react-native';
+import { View, Text, ScrollView, TextInput, KeyboardAvoidingView, ActivityIndicator, TouchableOpacity } from 'react-native';
 import Constants from '../../../config/constants'
 
 class DetailView extends React.Component {
@@ -14,39 +14,70 @@ class DetailView extends React.Component {
         this.state = {
             myComment: '',
             liked: false,
-            likeLoaded: false,
+            comments: [],
+            loaded: false
         };
     }
+
+    getProfile = (id) => {
+        this
+            .props
+            .navigation
+            .push('Profile', { id });
+    };
 
     componentDidMount() {
         const { getArticle } = this.props;
         getArticle(this.props.navigation.state.params.id);
     }
 
+
     componentWillReceiveProps(nextProps) {
-        if (this.state.likeLoaded != nextProps.completed) {
+        if (this.state.loaded != nextProps.completed) {
             const { article, user } = nextProps;
-            console.log("******************")
-
-            console.log(article)
             var found = false;
-            for (var i = 0; i < article.rating.length; i++) {
-                if (article.rating[i].user_id == user.user_id) {
-                    found = true;
-                    break;
+            if (article.rating)
+                for (var i = 0; i < article.rating.length; i++) {
+                    if (article.rating[i].user_id == user.user_id) {
+                        found = true;
+                        break;
+                    }
                 }
-            }
             this.setState({
-                likeLoaded: true,
                 liked: found,
+                comments: article.comments ? article.comments : [],
+                loaded: true,
             });
-
         }
+        // if (this.props.navigation.state.params.id != nextProps.navigation.state.params.id) {
+        //     this.setState({
+        //         loaded: false,
+        //     });
+        //     const { getArticle } = this.props;
+        //     getArticle(this.props.navigation.state.params.id);
+        // }
     }
 
     updateMyCommentText = myComment => {
         this.setState({ myComment });
     };
+
+    postComment = () => {
+        const { myComment } = this.state
+        const { postComment, user } = this.props
+        if (myComment != '') {
+            postComment(this.props.navigation.state.params.id, myComment)
+            this.setState(prevState => ({
+                comments: [{
+                    msg: myComment,
+                    user_id: user.user_id,
+                    displayName: user.displayName,
+                    img: user.img
+                }, ...prevState.comments],
+                myComment: '',
+            }))
+        }
+    }
 
     postFavorite = () => {
         const { liked } = this.state
@@ -54,15 +85,14 @@ class DetailView extends React.Component {
         this.setState({
             liked: !liked,
         })
-
     }
 
     render() {
 
-        const { myComment, liked, likeLoaded } = this.state
-        const { article, completed, loadingFavorite } = this.props
+        const { myComment, liked, comments } = this.state
+        const { completed, loadingFavorite, user, article, loadingComment } = this.props
         return (
-            <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
+            <KeyboardAvoidingView keyboardVerticalOffset={50} style={styles.container} behavior="padding" enabled>
 
 
                 <ScrollView >
@@ -75,7 +105,7 @@ class DetailView extends React.Component {
                                 type='ionicon'
                                 name={'ios-arrow-back'}
                                 color={Constants.WHITE_COLOR}
-                                onPress={() => this.props.navigation.goBack()}
+                                onPress={() => this.props.navigation.navigate("News")}
                             />
                         }
                         centerComponent={
@@ -84,7 +114,7 @@ class DetailView extends React.Component {
                         </Text>
                         }
                         rightComponent={
-                            loadingFavorite || !likeLoaded
+                            loadingFavorite || !completed
                                 ?
                                 <ActivityIndicator color={Constants.WHITE_COLOR} />
                                 :
@@ -109,15 +139,27 @@ class DetailView extends React.Component {
                                     <Text style={styles.title}>
                                         {article.title}
                                     </Text>
-                                    <Text style={styles.author}>
-                                        {article.author}
-                                    </Text>
+
+                                    <TouchableOpacity onPress={() => this.getProfile(article.author.user_id)}>
+                                        <View style={styles.iconContainer}>
+                                            <Avatar
+                                                size={37}
+                                                rounded
+                                                source={{
+                                                    uri: article.author.img,
+                                                }}
+                                            />
+                                            <Text style={styles.author}>
+                                                {article.author.displayName}
+                                            </Text>
+                                        </View>
+                                    </TouchableOpacity>
 
                                     <View style={styles.topCardContainer}>
                                         <View style={styles.iconContainer}>
                                             <Icon type='evilicon' name='tag' color='grey' />
                                             <Text style={styles.iconText}>
-                                                {article.tag}
+                                                {article.tag ? article.tag.join(", ") : ''}
                                             </Text>
                                         </View>
                                         <View style={styles.iconContainer}>
@@ -140,23 +182,22 @@ class DetailView extends React.Component {
 
                                 <Text style={styles.commentHeader}>
                                     Comments
-                        </Text>
+                                  </Text>
                                 <View style={styles.myCommentContainer}>
 
                                     <Avatar
                                         rounded
                                         size={39}
                                         source={{
-                                            uri:
-                                                'https://scontent.fbkk22-1.fna.fbcdn.net/v/t1.0-9/53160241_1756046387829287_3407601055209357312_n.jpg?_nc_cat=1&_nc_ht=scontent.fbkk22-1.fna&oh=8ad8689ea458798f60dc5f42f2b144c1&oe=5D631905',
+                                            uri: user.img,
                                         }}
                                     />
                                     <View style={{
                                         paddingLeft: 17, width: 'auto', flex: 1,
                                     }}>
                                         <Text style={styles.myCommentName}>
-                                            Mond
-                                </Text>
+                                            {user.displayName}
+                                        </Text>
                                         <View style={styles.commentButton}>
                                             <TextInput
                                                 value={myComment}
@@ -164,27 +205,33 @@ class DetailView extends React.Component {
                                                 placeholder='Type here...'
                                                 style={myComment == '' ? styles.textInput : styles.textInputEdited}
                                             />
-                                            <Icon
-                                                name='ios-send'
-                                                type='ionicon'
-                                                color={myComment == '' ? 'grey' : Constants.SECONDARY_COLOR}
-                                            />
+                                            {
+                                                !loadingComment ? <Icon
+                                                    name='ios-send'
+                                                    type='ionicon'
+                                                    color={myComment == '' ? 'grey' : Constants.SECONDARY_COLOR}
+                                                    onPress={() => this.postComment()}
+                                                /> : <ActivityIndicator color={Constants.PRIMARY_COLOR} />
+                                            }
+
                                         </View>
 
                                     </View>
-
-
                                 </View>
                                 {
-                                    article.comments.map((l, i) => (
-                                        <ListItem
-                                            key={i}
-                                            leftAvatar={{ source: { uri: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg' } }}
-                                            title='Nong Jamie'
-                                            titleStyle={styles.comment}
-                                            subtitle={l.msg}
-                                        />
-                                    ))
+                                    comments ?
+                                        comments.map((l, i) => (
+                                            <ListItem
+                                                onPress={() => this.getProfile(l.user_id)}
+                                                key={i}
+                                                leftAvatar={
+                                                    { source: { uri: l.img } }
+                                                }
+                                                title={l.displayName}
+                                                titleStyle={l.user_id == user.user_id ? styles.myComment : styles.otherComment}
+                                                subtitle={l.msg}
+                                            />
+                                        )) : null
                                 }
                             </View >
 
@@ -193,7 +240,7 @@ class DetailView extends React.Component {
                     }
                 </ScrollView >
 
-            </KeyboardAvoidingView>
+            </KeyboardAvoidingView >
 
         );
     }
@@ -209,8 +256,11 @@ DetailView.propTypes = {
     postFavorite: PropTypes.func.isRequired,
     loadingFavorite: PropTypes.bool.isRequired,
     errorFavorite: PropTypes.bool.isRequired,
-    completedFavorite: PropTypes.bool.isRequired,
     user: PropTypes.object.isRequired,
+    loadingComment: PropTypes.bool.isRequired,
+    errorComment: PropTypes.bool.isRequired,
+    postComment: PropTypes.func.isRequired,
+
 };
 
 

@@ -22,7 +22,7 @@ class LoginView extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.logged) {
-      this.props.navigation.navigate('Main');
+      this.props.navigation.navigate('Loading');
     }
   }
 
@@ -94,6 +94,9 @@ class LoginView extends React.Component {
                   color={Constants.WHITE_COLOR}
                 />
               }
+              onPress={() => {
+                this.props.loginByFacebook();
+              }}
               iconRight
               title="FACEBOOK  "
               buttonStyle={styles.socialBth}
@@ -101,6 +104,9 @@ class LoginView extends React.Component {
             />
             <Button
               type="outline"
+              onPress={() => {
+                this.props.loginByGoogle();
+              }}
               icon={
                 <Icon
                   name="google"
@@ -186,6 +192,8 @@ LoginView.propTypes = {
   isLoading: PropTypes.bool.isRequired,
   clearState: PropTypes.func.isRequired,
   logged: PropTypes.bool.isRequired,
+  loginByFacebook: PropTypes.func.isRequired,
+  loginByGoogle: PropTypes.func.isRequired
 };
 
 

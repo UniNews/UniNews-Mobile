@@ -19,6 +19,7 @@ class SearchView extends React.Component {
         super(props);
         this.state = {
             searchText: '',
+            isVisible: true,
         };
         this.typingTimeout = 0
     }
@@ -34,6 +35,20 @@ class SearchView extends React.Component {
         }
     };
 
+    getDetail = (id) => {
+        // this
+        //     .props
+        //     .navigation
+        //     .navigate('Detail', { id });
+        this.props.navigation.navigate({
+            routeName: 'Detail',
+            params: {
+                id: id,
+            },
+            key: id
+        });
+    };
+
 
     render() {
         const { searchText } = this.state;
@@ -41,6 +56,7 @@ class SearchView extends React.Component {
 
         return (
             <View style={styles.container}>
+
                 <Header
                     containerStyle={{ borderBottomWidth: 0 }}
                     backgroundColor={constants.SECONDARY_COLOR}
@@ -61,21 +77,18 @@ class SearchView extends React.Component {
                     containerStyle={{ backgroundColor: constants.SECONDARY_COLOR, borderBottomColor: 'transparent', borderTopColor: 'transparent' }}
                 />
                 <ScrollView>
-                    <Text>
-                        {searchText} and {searchedText}
-                    </Text>
                     {
                         searchText == '' ? null :
                             loading || searchedText != searchText ?
                                 <ActivityIndicator
-                                    size={40}
+                                    // size={40}
                                     style={styles.activityIndicator} />
                                 :
                                 result.map((u, i) => {
                                     return (
                                         <ArticleItem
                                             article={u}
-                                            // event={this.getDetail}
+                                            event={this.getDetail}
                                             key={u.id}
                                         />);
                                 })

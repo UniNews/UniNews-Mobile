@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import LoginView from './LoginView';
-import { loginByEmail, clearState } from '../../reducers/AuthReducer/actions';
+import { loginByEmail, clearState, loginByFacebook, loginByGoogle } from '../../reducers/AuthReducer/actions';
 
 
 const mapStateToProps = state => {
@@ -15,7 +15,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = {
     loginByEmail: loginByEmail,
-    clearState: clearState
+    clearState: clearState,
+    loginByFacebook: loginByFacebook,
+    loginByGoogle: loginByGoogle
 }
 
 

@@ -26,5 +26,25 @@ export default {
             user_token: idToken,
         }).then(response => response.data)
             .catch(error => error)
-    }
+    },
+
+    postComment: async (idToken, id, msg) => {
+        return await axios.post(`${constants.API_URL}/news/${id}/comments`, {
+            user_token: idToken,
+            msg: msg
+        }).then(response => response.data)
+            .catch(error => error)
+    },
+
+    postNews: async (idToken, catalog, description, imgs, title, tag) => {
+        return await axios.post(`${constants.API_URL}/news/addnews`, {
+            user_token: idToken,
+            catalog: catalog,
+            description: description,
+            imgs: imgs,
+            title: title,
+            tag: tag
+        }).then(response => response.data)
+            .catch(error => error)
+    },
 }

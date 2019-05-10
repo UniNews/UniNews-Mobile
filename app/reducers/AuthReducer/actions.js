@@ -1,6 +1,7 @@
 import firebaseService from '../../config/firebase';
 import * as types from './actionTypes';
 import userService from '../../services/user'
+import Constants from '../../config/constants'
 
 export const loginByEmail = (email, password) => dispatch => {
     dispatch(sessionLoading());
@@ -9,20 +10,52 @@ export const loginByEmail = (email, password) => dispatch => {
         .signInWithEmailAndPassword(email, password)
         .then(user => {
             const uid = user.user.uid
-            userService.getProfile(uid).then((res) => {
-                dispatch(sessionSuccess(res.result));
-            }).catch(err => dispatch(sessionError(err)));
+            dispatch(sessionSuccess(user));
+            // userService.getProfile(uid).then((res) => {
+            //     dispatch(sessionSuccess(res.result));
+            // }).catch(err => dispatch(sessionError(err)));
         })
         .catch(error => {
             dispatch(sessionError(error.message));
         });
 };
 
-export const autoLogin = (uid) => dispatch => {
+export const loginByFacebook = () => (dispatch) => {
     dispatch(sessionLoading());
-    userService.getProfile(uid).then((res) => {
-        dispatch(sessionSuccess(res.result));
+    userService.loginByFacebook().then((user) => {
+        userService.getToken().then(function (idToken) {
+            let displayName = user.user.providerData[0].displayName
+            userService.register(idToken, displayName).then((res) => {
+                // dispatch(sessionSuccess(res.result))
+                dispatch(sessionSuccess(user))
+            }).catch(err => dispatch(sessionError(err)));
+        }).catch(function (error) {
+            dispatch(sessionError(error.message))
+        });
     }).catch(err => dispatch(sessionError(err)));
+}
+
+export const loginByGoogle = () => (dispatch) => {
+    dispatch(sessionLoading());
+    userService.loginByGoogle().then((user) => {
+        userService.getToken().then(function (idToken) {
+            let displayName = user.user.providerData[0].displayName
+            userService.register(idToken, displayName).then((res) => {
+                // dispatch(sessionSuccess(res.result))
+                dispatch(sessionSuccess(user))
+            }).catch(err => dispatch(sessionError(err)));
+        }).catch(function (error) {
+            dispatch(sessionError(error.message))
+        });
+    }).catch(err => dispatch(sessionError(err)));
+}
+
+export const autoLogin = (user) => dispatch => {
+    dispatch(sessionLoading());
+    dispatch(sessionSuccess(user))
+    // userService.getProfile(uid).then((res) => {
+    //     dispatch(sessionSuccess(res.result));
+    // }).catch(err => dispatch(sessionError(err)));
 };
 
 export const signupByEmail = (email, password, displayName) => dispatch => {

@@ -1,12 +1,14 @@
 import React from 'react';
-import { Header, Icon, SearchBar } from 'react-native-elements';
+import { Header, Icon } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import {
     StyleSheet,
     Text,
     View,
     ScrollView,
-    RefreshControl
+    RefreshControl,
+    TouchableOpacity,
+    ActivityIndicator
 } from 'react-native';
 import Constants from './../../../config/constants'
 
@@ -17,7 +19,6 @@ class NewsView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            search: '',
             refreshing: false,
         };
     }
@@ -29,15 +30,18 @@ class NewsView extends React.Component {
         this.setState({ refreshing: false });
     }
 
-    updateSearch = search => {
-        this.setState({ search });
-    };
-
     getDetail = (id) => {
-        this
-            .props
-            .navigation
-            .navigate('Detail', { id });
+        // this
+        //     .props
+        //     .navigation
+        //     .navigate('Detail', { id });
+        this.props.navigation.navigate({
+            routeName: 'Detail',
+            params: {
+                id: id,
+            },
+            key: id
+        });
     };
 
     componentWillReceiveProps(nextProps) {
@@ -54,7 +58,6 @@ class NewsView extends React.Component {
 
     render() {
         const { selectedCampus, articles, completed } = this.props;
-        const { search } = this.state;
 
         return (
             <View style={styles.container}>
@@ -91,40 +94,44 @@ class NewsView extends React.Component {
                         />
                     }
                 />
-                <SearchBar
-                    placeholder="Type Here..."
-                    onChangeText={this.updateSearch}
-                    value={search}
-                    round
-                    lightTheme
-                    showLoading
-                    inputContainerStyle={{ backgroundColor: '#fff' }}
-                    leftIconContainerStyle={{ backgroundColor: '#fff' }}
-                    containerStyle={{ borderBottomColor: 'transparent', borderTopColor: 'transparent' }}
-                />
-                <View>
-                    <ScrollView
-                        refreshControl={
-                            <RefreshControl
-                                refreshing={this.state.refreshing}
-                                onRefresh={this._onRefresh}
-                            />
-                        }>
-                        {
-                            (completed) ?
-                                articles.map((u, i) => {
-                                    return (
-                                        <ArticleItem
-                                            article={u}
-                                            event={this.getDetail}
-                                            key={u.id}
-                                        />);
-                                }) : <View></View>
-                        }
-                    </ScrollView>
-                </View>
+                {
+                    (completed) ?
+                        articles.length > 0 ?
+                            <View style={{ paddingBottom: 100 }}>
+                                <ScrollView
+                                    refreshControl={
+                                        <RefreshControl
+                                            refreshing={this.state.refreshing}
+                                            onRefresh={this._onRefresh}
+                                        />
+                                    }>
+                                    {
+                                        articles.map((u, i) => {
+                                            return (
+                                                <ArticleItem
+                                                    article={u}
+                                                    event={this.getDetail}
+                                                    key={u.id}
+                                                />)
+                                        })
+                                    }
+                                </ScrollView>
+                            </View>
+                            :
+                            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
 
-            </View>
+                                <Text style={styles.refreshText} onPress={this._onRefresh}>
+                                    Something went wrong. press here to try again.
+                                  </Text>
+                            </View>
+                        :
+                        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }} >
+                            <ActivityIndicator
+                                size={'large'}
+                                style={styles.activityIndicator} />
+                        </View>
+                }
+            </View >
         );
     }
 }
@@ -132,14 +139,24 @@ class NewsView extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+
     },
     headerTitle: {
         fontSize: 20,
         color: '#fff',
         fontFamily: 'Kanit-Regular'
     },
-    newsContainer: {
-
+    activityIndicator: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    refreshText: {
+        fontSize: 16,
+        color: 'grey',
+        textAlign: 'center',
+        textAlignVertical: "center",
+        fontFamily: 'Kanit-Regular',
     }
 });
 

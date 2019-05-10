@@ -19,17 +19,17 @@ export function search(text) {
         service.getAllArticles()
             .then((res) => {
                 const articles = res.result;
-                // console.log(articles)
+                console.log(articles[0].author.displayName)
                 const newData = articles.filter(item => {
                     const itemData = `${item.title.toUpperCase()}   
-                    ${item.user_id.toUpperCase()}
+                    ${item.author.displayName.toUpperCase()}
                     ${item.tag.join('\n').toUpperCase()}`;
-                    // console.log("*****************************")
-                    // console.log(itemData)
+                    console.log("*****************************")
+                    console.log(itemData)
                     const queryData = text.toUpperCase();
                     return itemData.indexOf(queryData) > -1;
                 });
-                // console.log(newData)
+                console.log(newData)
                 dispatch(searchOk(newData, text));
             }).catch(err => dispatch(searchFail()));
     };

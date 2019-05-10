@@ -17,11 +17,12 @@ import {
 import MultipleInput from './../../../components/MultipleInput';
 
 import { ImagePicker, Permissions } from 'expo';
-import uuid from 'uuid';
-import firebase from './../../../config/firebase';
+// import uuid from 'uuid';
+// import firebase from './../../../config/firebase';
 import { Image, Header, Icon } from 'react-native-elements';
 import TxtInput from '../../../components/TextInput'
 import Constants from '../../../config/constants'
+import uploadService from '../../../services/upload'
 
 // import PropTypes from 'prop-types';
 
@@ -45,23 +46,6 @@ class PostView extends React.Component {
     checkIsEnabled(isEnabled) {
         this.setState({ isEnabled });
     }
-
-    // onSendPress = () => {
-    //     this._emailField.blur();
-    //     setTimeout(() => {
-    //         if (!this._emailField.isErrored()) {
-    // const message = `Emails sent!\n\n${this._emailField
-    //     .getSelectedEmails()
-    //     .join('\n')}`;
-
-    //             clearInterval(this.cancelMessage);
-    //             this.setState({ message });
-    //             this.cancelMessage = setTimeout(() => {
-    //                 this.setState({ message: '' });
-    //             }, 2000);
-    //         }
-    //     });
-    // };
 
     static defaultProps = {
         items: [
@@ -102,10 +86,15 @@ class PostView extends React.Component {
     }
 
     addNewPost = () => {
+        const { description, image, title } = this.state
+        const { postNews, selectedCampus } = this.props
         const tags = this._emailField
             .getSelectedEmails()
-        console.log(tags)
-        this.validation()
+        // console.log(tags)
+        var isValid = this.validation()
+        if (isValid) {
+            postNews(selectedCampus, description, image, title, tags)
+        }
     }
 
     validation = () => {
@@ -128,8 +117,7 @@ class PostView extends React.Component {
 
     render() {
 
-        // let { image } = this.state;
-        const { items } = this.props;
+        const { items, loading } = this.props;
         const { isEnabled, message, title, description, titleError, descriptionError, image, uploading } = this.state;
 
         return (
@@ -153,13 +141,16 @@ class PostView extends React.Component {
                         </Text>
                     }
                     rightComponent={
-                        <Icon
-                            type='ionicon'
-                            name={'ios-send'}
-                            size={29}
-                            color={Constants.WHITE_COLOR}
-                            onPress={this.addNewPost}
-                        />
+                        loading ? <ActivityIndicator
+                            color={Constants.WHITE_COLOR} />
+                            :
+                            <Icon
+                                type='ionicon'
+                                name={'ios-send'}
+                                size={29}
+                                color={Constants.WHITE_COLOR}
+                                onPress={this.addNewPost}
+                            />
                     }
                 />
 
@@ -181,7 +172,7 @@ class PostView extends React.Component {
                                     onChangeText={(text) => this.setState({ title: text })}
                                 />
                             </View>
-                            <View style={{ paddingHorizontal: 20 }}>
+                            <View style={{ paddingHorizontal: 20, paddingTop: 10 }}>
                                 <MultipleInput
                                     ref={c => (this._emailField = c)}
                                     itemId="name"
@@ -260,7 +251,7 @@ class PostView extends React.Component {
             this.setState({ uploading: true });
 
             if (!pickerResult.cancelled) {
-                uploadUrl = await uploadImageAsync(pickerResult.uri);
+                uploadUrl = await uploadService.uploadImageAsync(pickerResult.uri);
                 this.setState({ image: uploadUrl });
             }
         } catch (e) {
@@ -272,32 +263,32 @@ class PostView extends React.Component {
     };
 }
 
-async function uploadImageAsync(uri) {
-    const blob = await new Promise((resolve, reject) => {
-        const xhr = new XMLHttpRequest();
-        xhr.onload = function () {
-            resolve(xhr.response);
-        };
-        xhr.onerror = function (e) {
-            console.log(e);
-            reject(new TypeError('Network request failed'));
-        };
-        xhr.responseType = 'blob';
-        xhr.open('GET', uri, true);
-        xhr.send(null);
-    });
+// async function uploadImageAsync(uri) {
+//     const blob = await new Promise((resolve, reject) => {
+//         const xhr = new XMLHttpRequest();
+//         xhr.onload = function () {
+//             resolve(xhr.response);
+//         };
+//         xhr.onerror = function (e) {
+//             console.log(e);
+//             reject(new TypeError('Network request failed'));
+//         };
+//         xhr.responseType = 'blob';
+//         xhr.open('GET', uri, true);
+//         xhr.send(null);
+//     });
 
-    const ref = firebase
-        .storage()
-        .ref()
-        .child('postImages')
-        .child(uuid.v4());
-    const snapshot = await ref.put(blob);
+//     const ref = firebase
+//         .storage()
+//         .ref()
+//         .child('postImages')
+//         .child(uuid.v4());
+//     const snapshot = await ref.put(blob);
 
-    blob.close();
+//     blob.close();
 
-    return await snapshot.ref.getDownloadURL();
-}
+//     return await snapshot.ref.getDownloadURL();
+// }
 
 
 const styles = StyleSheet.create({
@@ -323,7 +314,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Kanit-Regular'
     },
     topPost: {
-        paddingTop: 5,
+        paddingTop: 20,
     },
     imageTitle: {
         paddingHorizontal: 21, fontSize: 16, color: Constants.SECONDARY_COLOR

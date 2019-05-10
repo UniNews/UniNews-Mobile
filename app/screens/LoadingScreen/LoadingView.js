@@ -9,13 +9,22 @@ class LoadingView extends React.Component {
 
     componentDidMount() {
 
-        const { autoLogin } = this.props
+        const { autoLogin, getProfile } = this.props
 
         firebase.auth().onAuthStateChanged(user => {
-            console.log(user.uid)
-            autoLogin(user.uid)
-            this.props.navigation.navigate(user ? 'Main' : 'Auth')
+            if (user) {
+                getProfile(user.uid)
+                autoLogin(user)
+            } else {
+                this.props.navigation.navigate('Auth')
+            }
         })
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.logged && nextProps.getProfileCompleted) {
+            this.props.navigation.navigate('Main')
+        }
     }
 
     render() {
@@ -39,6 +48,9 @@ const styles = StyleSheet.create({
 LoadingView.propTypes = {
     isLoading: PropTypes.bool.isRequired,
     autoLogin: PropTypes.func.isRequired,
+    logged: PropTypes.bool.isRequired,
+    getProfileCompleted: PropTypes.bool.isRequired,
+    getProfile: PropTypes.func.isRequired,
 };
 
 

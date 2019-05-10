@@ -2,7 +2,7 @@ import React from 'react';
 import { Header, Icon } from 'react-native-elements';
 import PropTypes from 'prop-types';
 // import { Constants } from 'expo';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, ActivityIndicator } from 'react-native';
 import CampusItem from '../../../components/CampusItem'
 import Constants from '../../../config/constants'
 
@@ -57,6 +57,7 @@ class CampusView extends React.Component {
 
     render() {
         const { isCampusChanged, selectedCampus } = this.state;
+        const { loading } = this.props
         return (
             <View style={{ paddingHorizontal: 0 }}>
                 <Header
@@ -74,10 +75,13 @@ class CampusView extends React.Component {
                             SELECT CAMPUS
                         </Text>
                     }
+                    rightComponent={
+                        loading ? <ActivityIndicator
+                            color={Constants.WHITE_COLOR} />
+                            :
+                            null
+                    }
                 />
-                <Text>
-                    {isCampusChanged ? "CHANGE" : "NOT"} {this.state.selectedCampus}
-                </Text>
                 {
                     this.props.completed ?
                         (

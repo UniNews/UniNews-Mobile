@@ -1,21 +1,22 @@
 import { connect } from 'react-redux';
 import AddPostView from './AddPostView';
+import { postNews } from '../../../reducers/PostReducer/actions';
+
 // import { getCampus, selectCampus } from '../../../reducers/CampusReducer/actions';
 
 const mapStateToProps = state => {
-    // const { selectedCampus, campus, completed, loading, error } = state.campusReducer;
+    const { selectedCampus } = state.campusReducer;
+    const { loading, error, completed } = state.postReducer;
     return {
-        // currentCampus: selectedCampus,
-        // campus: campus,
-        // completed: completed,
-        // loading: loading,
-        // error: error,
+        selectedCampus: selectedCampus,
+        loading: loading,
+        error: error,
+        completed: completed
     }
 };
 
 const mapDispatchToProps = {
-    // getCampus: getCampus,
-    // changeCampus: selectCampus
+    postNews: postNews
 };
 
-export default (AddPostView);
+export default connect(mapStateToProps, mapDispatchToProps)(AddPostView);
