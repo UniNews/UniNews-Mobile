@@ -110,8 +110,8 @@ class DetailView extends React.Component {
                         }
                         centerComponent={
                             <Text style={styles.headerTitle}>
-                                DETAIL
-                        </Text>
+                                {article.catalog ? article.catalog.toUpperCase() : 'DETAIL'}
+                            </Text>
                         }
                         rightComponent={
                             loadingFavorite || !completed
