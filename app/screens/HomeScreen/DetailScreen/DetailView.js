@@ -3,8 +3,10 @@ import styles from './style.js';
 
 import { Image, Icon, Divider, ListItem, Avatar, Header, Button } from 'react-native-elements';
 import PropTypes from 'prop-types';
-import { View, Text, ScrollView, TextInput, KeyboardAvoidingView, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, TextInput, KeyboardAvoidingView, ActivityIndicator, TouchableOpacity, Linking } from 'react-native';
 import Constants from '../../../config/constants'
+
+import Hyperlink from 'react-native-hyperlink'
 
 class DetailView extends React.Component {
 
@@ -136,7 +138,7 @@ class DetailView extends React.Component {
                                 />
 
                                 <View style={{ padding: 20 }}>
-                                    <Text style={styles.title}>
+                                    <Text style={styles.title} selectable>
                                         {article.title}
                                     </Text>
 
@@ -171,9 +173,14 @@ class DetailView extends React.Component {
                                     </View>
                                     <Divider style={{ marginTop: 20, backgroundColor: 'grey' }} />
 
-                                    <Text style={styles.description}>
-                                        {article.description}
-                                    </Text>
+                                    <Hyperlink
+                                        linkStyle={{ textDecorationLine: 'underline', color: Constants.SECONDARY_COLOR }}
+                                        onPress={(url, text) => Linking.openURL(url)} >
+                                        <Text style={styles.description} selectable>
+                                            {article.description}
+                                        </Text>
+                                    </Hyperlink>
+
 
                                     <Divider style={{ marginTop: 20, backgroundColor: 'grey' }} />
 
