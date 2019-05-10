@@ -31,29 +31,29 @@ export default class ArticleItem extends React.Component {
                         <Text style={styles.title}>
                             {article.title}
                         </Text>
-                        
-                            {/* <Icon type='ionicon' name='md-heart-empty' color='grey' size={24} /> : */}
-                        
+
+                        {/* <Icon type='ionicon' name='md-heart-empty' color='grey' size={24} /> : */}
+
                     </View>
 
-                    <Text style={styles.ahuthor}>
-                        {article.author}
+                    <Text style={styles.author}>
+                        {article.author.displayName}
                     </Text>
 
                     <View style={styles.middleCardContainer}>
                         <View style={styles.iconContainer}>
                             <Icon type='evilicon' name='tag' color='grey' />
                             <Text style={styles.iconText}>
-                                {article.tag}
+                                {article.tag ? article.tag.join(", ") : ''}
                             </Text>
                         </View>
 
-                        <View style={styles.iconContainer}>
+                        {/* <View style={styles.iconContainer}>
                             <Icon type='evilicon' name='location' color='grey' />
                             <Text style={styles.iconText}>
                                 {article.location}
                             </Text>
-                        </View>
+                        </View> */}
 
                     </View>
 
@@ -68,14 +68,14 @@ export default class ArticleItem extends React.Component {
                         <View style={styles.iconContainer}>
                             <Icon type='evilicon' name='heart' color='grey' />
                             <Text style={styles.iconText}>
-                                {article.rating.length} Likes
+                                {article.rating ? article.rating.length : 0} Likes
                     </Text>
                         </View>
 
                         <View style={styles.iconContainer}>
                             <Icon type='evilicon' name='comment' color='grey' />
                             <Text style={styles.iconText}>
-                                {article.comments.length} Comments
+                                {article.comments ? article.comments.length : 0} Comments
                     </Text>
 
 
