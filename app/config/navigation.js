@@ -7,8 +7,9 @@ import DetailScreen from '../screens/HomeScreen/DetailScreen'
 import AddPostScreen from '../screens/HomeScreen/AddPostScreen'
 
 import LoadingScreen from '../screens/LoadingScreen'
-import SearchScreem from '../screens/SearchScreen'
+import SearchScreen from '../screens/SearchScreen'
 import ProfileScreen from '../screens/ProfileScreen'
+import ChangeProfileScreen from '../screens/ChangeProfileScreen'
 
 import React from 'react';
 
@@ -48,14 +49,34 @@ const AuthStack = createStackNavigator({
     }
 );
 
-const MainTab = createBottomTabNavigator({
-    Home: HomeStack,
-    Search: {
-        screen: SearchScreem
-    },
+const ProfileStack = createStackNavigator({
     Profile: {
         screen: ProfileScreen
     },
+    ChangeProfile: {
+        screen: ChangeProfileScreen
+    }
+
+}, {
+        initialRouteName: 'Profile',
+        headerMode: 'none',
+    }
+);
+
+const SearchStack = createStackNavigator({
+    Search: {
+        screen: SearchScreen
+    },
+}, {
+        initialRouteName: 'Search',
+        headerMode: 'none',
+    }
+);
+
+const MainTab = createBottomTabNavigator({
+    Home: HomeStack,
+    Search: SearchStack,
+    Profile: ProfileStack
 },
     {
         initialRouteName: 'Home',
