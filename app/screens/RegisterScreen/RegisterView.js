@@ -17,14 +17,22 @@ class RegisterView extends React.Component {
             email: '',
             password: '',
             repassword: '',
-            passwordError: ' '
+            passwordError: ' ',
+            errorAlert: '',
         };
     }
 
 
-    componentDidUpdate(prevProps) {
-        if (this.props.registered) {
-            this.props.navigation.goBack();
+    // componentDidUpdate(prevProps) {
+    //     if (this.props.registered) {
+    //         console.log("TEST")
+    //         this.props.navigation.navigate('Login')
+    //     }
+    // }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.error) {
+            this.setState({ errorAlert: nextProps.error })
         }
     }
 
@@ -33,14 +41,23 @@ class RegisterView extends React.Component {
     }
 
     render() {
-        const { loading, error } = this.props
+        const { loading } = this.props
+        const { errorAlert } = this.state
 
         return (
             <ImageBackground source={require('../../assets/imgs/bg.jpg')} style={{ width: '100%', height: '100%' }}>
 
                 <View style={styles.container}>
-                    {error ?
-                        Alert.alert(this.props.error)
+                    {errorAlert != '' ?
+                        Alert.alert(
+                            "Error",
+                            errorAlert,
+                            [
+                                {
+                                    text: 'OK', onPress: () => this.setState({ errorAlert: '' })
+                                },
+                            ],
+                        )
                         : null}
 
                     <Text style={styles.topic}>CREATE ACCOUNT</Text>

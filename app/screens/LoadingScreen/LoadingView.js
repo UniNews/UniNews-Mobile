@@ -13,19 +13,21 @@ class LoadingView extends React.Component {
 
         firebase.auth().onAuthStateChanged(user => {
             if (user) {
+                console.log("HAS ")
                 getProfile(user.uid)
                 autoLogin(user)
+                this.props.navigation.navigate('Main')
             } else {
                 this.props.navigation.navigate('Auth')
             }
         })
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.logged && nextProps.getProfileCompleted) {
-            this.props.navigation.navigate('Main')
-        }
-    }
+    // componentWillReceiveProps(nextProps) {
+    //     if (nextProps.logged && nextProps.getProfileCompleted) {
+    //         this.props.navigation.navigate('Main')
+    //     }
+    // }
 
     render() {
         return (

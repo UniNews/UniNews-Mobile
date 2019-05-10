@@ -6,13 +6,15 @@ import { getArticles } from '../../../reducers/NewsReducer/actions';
 const mapStateToProps = state => {
     const { loading, articles, error, completed } = state.newsReducer;
     const { selectedCampus } = state.campusReducer;
+    const { profile } = state.profileReducer;
 
     return {
         // loading: loading,
         articles: articles,
         error: error,
         completed: completed,
-        selectedCampus: selectedCampus
+        selectedCampus: selectedCampus,
+        profile: profile
     }
 };
 

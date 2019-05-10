@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, ImageBackground, KeyboardAvoidingView } from 'react-native';
+import { View, StyleSheet, ImageBackground, KeyboardAvoidingView, } from 'react-native';
 import { Input, Image, Button } from 'react-native-elements';
 import { ActivityIndicator, TouchableOpacity, Text, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -13,11 +13,18 @@ class LoginView extends React.Component {
     this.state = {
       email: '',
       password: '',
+      errorAlert: '',
     };
   }
 
   componentWillMount() {
     this.props.clearState();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.error) {
+      this.setState({ errorAlert: nextProps.error })
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -29,11 +36,20 @@ class LoginView extends React.Component {
   render() {
 
     const { isLoading, error } = this.props
+    const { errorAlert } = this.state
     return (
 
       <ImageBackground source={require('../../assets/imgs/bg.jpg')} style={{ width: '100%', height: '100%' }}>
-        {error ?
-          Alert.alert(this.props.error)
+        {errorAlert != '' ?
+          Alert.alert(
+            "Error",
+            errorAlert,
+            [
+              {
+                text: 'OK', onPress: () => this.setState({ errorAlert: '' })
+              },
+            ],
+          )
           : null}
         <KeyboardAvoidingView style={styles.container}>
           <Image
