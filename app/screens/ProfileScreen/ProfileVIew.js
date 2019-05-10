@@ -41,6 +41,7 @@ class ProfileView extends React.Component {
     }
 
     _onRefresh = () => {
+        console.log("CALLED")
         const { getProfile, profile } = this.props
         const { isRoot } = this.state
         this.setState({ refreshing: true, loading: true });
@@ -52,8 +53,8 @@ class ProfileView extends React.Component {
                 this.setState({
                     displayName: res.result.displayName,
                     aboutMe: res.result.aboutMe,
-                    following: res.result.following ? res.result.following : [],
-                    follower: res.result.follower ? res.result.follower : [],
+                    following: res.result.following_detail ? res.result.following_detail : [],
+                    follower: res.result.follower_detail ? res.result.follower_detail : [],
                     posts: res.result.post_detail ? res.result.post_detail : [],
                     liked: res.result.like_detail ? res.result.like_detail : [],
                     error: '',
@@ -79,18 +80,40 @@ class ProfileView extends React.Component {
             this.setState({
                 displayName: nextProps.profile.displayName,
                 aboutMe: nextProps.profile.aboutMe,
-                following: nextProps.profile.following ? nextProps.profile.following : [],
-                follower: nextProps.profile.follower ? nextProps.profile.follower : [],
+                following: nextProps.profile.following_detail ? nextProps.profile.following_detail : [],
+                follower: nextProps.profile.follower_detail ? nextProps.profile.follower_detail : [],
                 posts: nextProps.profile.post_detail ? nextProps.profile.post_detail : [],
                 liked: nextProps.profile.like_detail ? nextProps.profile.like_detail : [],
                 error: '',
                 img: nextProps.profile.img,
                 isRoot: true,
                 uid: nextProps.profile.user_id,
-
                 loading: false,
-
             });
+        }
+        else if (!isRoot && nextProps.completed && nextProps.profile) {
+            const { id } = this.props.navigation.state.params;
+            userService.getProfile(id).then((res) => {
+                this.setState({
+                    displayName: res.result.displayName,
+                    aboutMe: res.result.aboutMe,
+                    following: res.result.following_detail ? res.result.following_detail : [],
+                    follower: res.result.follower_detail ? res.result.follower_detail : [],
+                    posts: res.result.post_detail ? res.result.post_detail : [],
+                    liked: res.result.like_detail ? res.result.like_detail : [],
+                    error: '',
+                    img: res.result.img,
+                    isRoot: false,
+                    uid: res.result.user_id,
+                    loading: false,
+                })
+            }).catch(err =>
+                this.setState({
+                    error: 'No user',
+                    loading: false,
+                },
+                )
+            );
         }
     }
 
@@ -103,20 +126,8 @@ class ProfileView extends React.Component {
             this.setState({
                 displayName: profile.displayName,
                 aboutMe: profile.aboutMe,
-                following: profile.following ? profile.following : [],
-                follower: profile.follower ? profile.follower : [],
-                // following: [{
-                //     user_id: 'cppbR6T2IDYCSOJuKli8r1FEJD53',
-                //     img: "https://firebasestorage.googleapis.com/v0/b/uninews-api.appspot.com/o/default_user.png?alt=media&token=fdfe897b-5019-4fa7-861a-1afcc92b48f2",
-                //     displayName: 'pauls',
-                //     aboutMe: 'ควยไรเจมมี่'
-                // }],
-                // follower: [{
-                //     user_id: 'eJl6QqogWIhphO9yRV09524BlNw2',
-                //     img: "https://firebasestorage.googleapis.com/v0/b/uninews-api.appspot.com/o/default_user.png?alt=media&token=fdfe897b-5019-4fa7-861a-1afcc92b48f2",
-                //     displayName: 'god',
-                //     aboutMe: 'Cry T_T'
-                // }],
+                following: profile.following_detail ? profile.following_detail : [],
+                follower: profile.follower_detail ? profile.follower_detail : [],
                 posts: profile.post_detail ? profile.post_detail : [],
                 liked: profile.like_detail ? profile.like_detail : [],
                 error: '',
@@ -132,8 +143,8 @@ class ProfileView extends React.Component {
                 this.setState({
                     displayName: res.result.displayName,
                     aboutMe: res.result.aboutMe,
-                    following: res.result.following ? res.result.following : [],
-                    follower: res.result.follower ? res.result.follower : [],
+                    following: res.result.following_detail ? res.result.following_detail : [],
+                    follower: res.result.follower_detail ? res.result.follower_detail : [],
                     posts: res.result.post_detail ? res.result.post_detail : [],
                     liked: res.result.like_detail ? res.result.like_detail : [],
                     error: '',
@@ -166,13 +177,8 @@ class ProfileView extends React.Component {
     followUser = (uid) => {
         const { followingUser } = this.props
         followingUser(uid)
+        this._onRefresh()
     }
-
-    unfollowuser = (uid) => {
-        const { followingUser } = this.props
-
-    }
-
 
     getProfile = (id) => {
         this
@@ -187,15 +193,15 @@ class ProfileView extends React.Component {
         if (profile.user_id == uid) {
             return null
         }
-        for (var user in profile.following) {
-            var following_uid = profile.following[user].user_id;
+        for (var user in profile.following_detail) {
+            var following_uid = profile.following_detail[user].user_id;
             if (following_uid == uid) {
                 return < Icon
                     type='entypo'
                     name={'remove-user'}
                     color={Constants.WHITE_COLOR}
                     onPress={() => {
-                        this.unfollowuser(uid)
+                        this.followUser(uid)
                     }}
                 />
             }
@@ -331,7 +337,9 @@ class ProfileView extends React.Component {
                                 }>
                                 <ImageBackground
                                     source={require('../../assets/imgs/ku-logo.jpg')}
-                                    resizeMode='cover'>
+                                    resizeMode='cover'
+                                    style={{}}
+                                >
                                     <View style={{
                                         paddingTop: 20, paddingHorizontal: 20, paddingBottom: 10, alignItems: 'center',
                                     }}>
