@@ -143,17 +143,17 @@ class DetailView extends React.Component {
                                         {article.title}
                                     </Text>
 
-                                    <TouchableOpacity onPress={() => this.getProfile(article.author.user_id ? article.author.user_id : '')}>
+                                    <TouchableOpacity onPress={() => this.getProfile(article.author ? article.author.user_id : '')}>
                                         <View style={styles.iconContainer}>
                                             <Avatar
                                                 size={37}
                                                 rounded
                                                 source={{
-                                                    uri: article.author.img ? article.author.img : '',
+                                                    uri: article.author ? article.author.img : '',
                                                 }}
                                             />
                                             <Text style={styles.author}>
-                                                {article.author.displayName ? article.author.displayName : ''}
+                                                {article.author ? article.author.displayName : ''}
                                             </Text>
                                         </View>
                                     </TouchableOpacity>
