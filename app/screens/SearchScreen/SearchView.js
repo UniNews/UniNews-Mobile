@@ -67,6 +67,10 @@ class SearchView extends React.Component {
                     }
                 />
                 <SearchBar
+                    showLoading={
+                        searchText != '' &&
+                        (loading || searchedText != searchText)
+                    }
                     placeholder="Title, Author, Tag"
                     onChangeText={this.updateSearch}
                     value={searchText}
@@ -78,11 +82,11 @@ class SearchView extends React.Component {
                 />
                 <ScrollView>
                     {
-                        searchText == '' ? null :
-                            loading || searchedText != searchText ?
-                                <ActivityIndicator
-                                    // size={40}
-                                    style={styles.activityIndicator} />
+                            searchText == '' || loading || searchedText != searchText ?
+                                null
+                                // <ActivityIndicator
+                                //     // size={40}
+                                //     style={styles.activityIndicator} />
                                 :
                                 result.map((u, i) => {
                                     return (
