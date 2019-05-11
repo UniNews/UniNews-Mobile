@@ -148,7 +148,7 @@ class DetailView extends React.Component {
                                                 size={37}
                                                 rounded
                                                 source={{
-                                                    uri: article.author.img,
+                                                    uri: article.author.img ? article.author.img : '',
                                                 }}
                                             />
                                             <Text style={styles.author}>

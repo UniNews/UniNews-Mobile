@@ -26,7 +26,7 @@ export default class ArticleItem extends React.Component {
         return (
             <TouchableWithoutFeedback onPress={() => event(article.id)} >
                 <Card containerStyle={styles.block}
-                    image={{ uri: article.imgs }}>
+                    image={{ uri: article.imgs}}>
                     <View style={styles.topCardContainer}>
                         <Text style={styles.title}>
                             {article.title}
