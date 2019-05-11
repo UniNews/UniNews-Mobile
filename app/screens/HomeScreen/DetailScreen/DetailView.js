@@ -22,10 +22,11 @@ class DetailView extends React.Component {
     }
 
     getProfile = (id) => {
-        this
-            .props
-            .navigation
-            .push('Profile', { id });
+        if (id != '')
+            this
+                .props
+                .navigation
+                .push('Profile', { id });
     };
 
     componentDidMount() {
@@ -142,7 +143,7 @@ class DetailView extends React.Component {
                                         {article.title}
                                     </Text>
 
-                                    <TouchableOpacity onPress={() => this.getProfile(article.author.user_id)}>
+                                    <TouchableOpacity onPress={() => this.getProfile(article.author.user_id ? article.author.user_id : '')}>
                                         <View style={styles.iconContainer}>
                                             <Avatar
                                                 size={37}
@@ -152,7 +153,7 @@ class DetailView extends React.Component {
                                                 }}
                                             />
                                             <Text style={styles.author}>
-                                                {article.author.displayName}
+                                                {article.author.displayName ? article.author.displayName : ''}
                                             </Text>
                                         </View>
                                     </TouchableOpacity>
