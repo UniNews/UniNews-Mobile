@@ -52,3 +52,11 @@ export function followingUser(uid) {
         });
     }
 }
+
+export const clearProfile = () => dispatch => {
+    dispatch(sessionClear());
+};
+
+const sessionClear = () => ({
+    type: types.PROFILE_RESET
+});

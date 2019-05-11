@@ -67,7 +67,7 @@ export const signupByEmail = (email, password, displayName) => dispatch => {
         .then(usr => {
             userService.getToken().then(function (idToken) {
                 userService.register(idToken, displayName).then((res) => {
-                    dispatch(sessionSuccess(user))
+                    dispatch(sessionSuccess(usr))
                     // dispatch(signupSuccess())
                 }).catch(err => dispatch(sessionError(err)));
             }).catch(function (error) {

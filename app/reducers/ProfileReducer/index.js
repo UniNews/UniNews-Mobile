@@ -40,6 +40,8 @@ const reducer = (state = initialState, action) => {
                 completed: true,
                 profile: {},
             };
+        case types.PROFILE_RESET:
+            return initialState;
         /* FAVORITE REDUCER */
         // case types.REQUEST_FAVORITE:
         //     return {

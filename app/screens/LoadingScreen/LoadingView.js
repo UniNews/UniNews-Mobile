@@ -7,27 +7,53 @@ import firebase from './../../config/firebase'
 
 class LoadingView extends React.Component {
 
-    componentDidMount() {
 
+    componentWillMount() {
         const { autoLogin, getProfile } = this.props
-
-        firebase.auth().onAuthStateChanged(user => {
+        this.unsubscribe = firebase.auth().onAuthStateChanged(user => {
             if (user) {
-                console.log("HAS ")
-                getProfile(user.uid)
                 autoLogin(user)
-                this.props.navigation.navigate('Main')
+                getProfile(user.uid)
             } else {
                 this.props.navigation.navigate('Auth')
             }
-        })
+        });
     }
 
-    // componentWillReceiveProps(nextProps) {
-    //     if (nextProps.logged && nextProps.getProfileCompleted) {
-    //         this.props.navigation.navigate('Main')
-    //     }
+    componentWillUnmount() {
+        this.unsubscribe();
+    }
+
+    // componentDidMount() {
+
+    //     const { autoLogin, clearState, clearProfile } = this.props
+    //     firebase.auth().onAuthStateChanged(user => {
+    //         if (user) {
+    //             console.log("HAS ")
+    //             // getProfile(user.uid)
+    //             autoLogin(user)
+    //             // this.props.navigation.navigate('Main')
+    //         } else {
+    //             clearState()
+    //             clearProfile()
+    //             this.props.navigation.navigate('Auth')
+    //         }
+    //     })
     // }
+
+    componentWillReceiveProps(nextProps) {
+        const { getProfile } = this.props
+
+        // if (nextProps.logged) {
+        //     getProfile(nextProps.user.uid)
+        // }
+        // if (nextProps.getProfileCompleted) {
+        //     this.props.navigation.navigate('Main')
+        // }
+        if (nextProps.logged && nextProps.getProfileCompleted) {
+            this.props.navigation.navigate('Main')
+        }
+    }
 
     render() {
         return (
@@ -53,6 +79,7 @@ LoadingView.propTypes = {
     logged: PropTypes.bool.isRequired,
     getProfileCompleted: PropTypes.bool.isRequired,
     getProfile: PropTypes.func.isRequired,
+    // user: PropTypes.object.isRequired
 };
 
 
